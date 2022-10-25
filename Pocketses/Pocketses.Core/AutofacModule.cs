@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using AutoMapper;
 using Pocketses.Core.Attributes;
 using System.Reflection;
 using Module = Autofac.Module;
@@ -10,7 +11,10 @@ namespace Pocketses.Core
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
-            RegisterServices(typeof(CoreAutofacModule).Assembly, builder);
+
+            var assembly = typeof(CoreAutofacModule).Assembly;
+            RegisterServices(assembly, builder);
+            ConfigureAutoMapper(assembly, builder);
         }
 
         protected void RegisterServices(Assembly assembly, ContainerBuilder builder)
@@ -29,6 +33,21 @@ namespace Pocketses.Core
                         builder.RegisterType(type).AsImplementedInterfaces().InstancePerLifetimeScope();
                 }
             }
+        }
+
+        protected void ConfigureAutoMapper(Assembly assembly, ContainerBuilder builder)
+        {
+            var profiles = assembly.DefinedTypes.Where(t => typeof(Profile).IsAssignableFrom(t)).Select(t => Activator.CreateInstance(t) as Profile).ToArray();
+            var configuration = new MapperConfiguration(cfg => cfg.AddProfiles(profiles));
+
+#if DEBUG
+            configuration.AssertConfigurationIsValid();
+#endif
+
+            builder
+                .RegisterInstance(configuration.CreateMapper())
+                .As<IMapper>()
+                .SingleInstance();
         }
     }
 }
