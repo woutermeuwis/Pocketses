@@ -1,7 +1,9 @@
 ﻿using Pocketses.Core.AppServices.Interfaces;
+using Pocketses.Core.Attributes;
 
 namespace Pocketses.Core.AppServices;
 
-internal class PlayerAppService : IPlayerAppService
+[ScopedDependency]
+public class PlayerAppService : IPlayerAppService
 {
 }

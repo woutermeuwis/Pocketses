@@ -2,5 +2,5 @@
 
 namespace Pocketses.Core.Repositories.Interfaces;
 
-internal interface ICampaignRepository : IRepository<Campaign>
+public interface ICampaignRepository : IRepository<Campaign>
 { }

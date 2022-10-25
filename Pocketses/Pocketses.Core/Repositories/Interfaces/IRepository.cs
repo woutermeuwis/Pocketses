@@ -1,8 +1,9 @@
-﻿using Pocketses.Core.Models.Specifications;
+﻿using Pocketses.Core.Attributes;
+using Pocketses.Core.Models.Specifications;
 
 namespace Pocketses.Core.Repositories.Interfaces;
 
-internal interface IRepository<T> where T : class
+public interface IRepository<T> where T : class
 {
     Task<List<T>> GetAllAsync();
     Task<List<T>> GetAllAsync(ISpecification<T> specification);

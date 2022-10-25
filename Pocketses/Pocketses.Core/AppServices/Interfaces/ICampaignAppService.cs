@@ -2,7 +2,7 @@
 
 namespace Pocketses.Core.AppServices.Interfaces;
 
-public interface ICampaignAppService
+public interface ICampaignAppService 
 {
     Task<List<Campaign>> GetCampaignsAsync(string searchFilter);
     Task<Campaign> GetCampaignAsync(Guid id);

@@ -1,11 +1,13 @@
 ﻿using Pocketses.Core.AppServices.Interfaces;
+using Pocketses.Core.Attributes;
 using Pocketses.Core.Models;
 using Pocketses.Core.Models.Specifications.Campaigns;
 using Pocketses.Core.Repositories.Interfaces;
 
 namespace Pocketses.Core.AppServices;
 
-internal class CampaignAppService : ICampaignAppService
+[ScopedDependency]
+public class CampaignAppService : ICampaignAppService
 {
     private readonly ICampaignRepository _campaignRepository;
 

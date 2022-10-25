@@ -3,7 +3,7 @@ using Pocketses.Core.DataAccessLayer;
 using Pocketses.Core.Models.Specifications;
 
 namespace Pocketses.Core.Repositories;
-internal class BaseRepository<T> where T : class
+public class BaseRepository<T> where T : class
 {
     protected PocketsesContext Context { get; set; }
     protected DbSet<T> Table { get; }

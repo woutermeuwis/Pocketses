@@ -2,5 +2,5 @@
 
 namespace Pocketses.Core.Repositories.Interfaces;
 
-internal interface IPlayerRepository : IRepository<Player>
+public interface IPlayerRepository : IRepository<Player>
 { }

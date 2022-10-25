@@ -1,7 +1,9 @@
 ﻿using Pocketses.Core.AppServices.Interfaces;
+using Pocketses.Core.Attributes;
 
 namespace Pocketses.Core.AppServices;
 
-internal class CharacterAppService: ICharacterAppService
+[ScopedDependency]
+public class CharacterAppService: ICharacterAppService
 {
 }

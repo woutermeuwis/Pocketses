@@ -2,5 +2,5 @@
 
 namespace Pocketses.Core.Repositories.Interfaces;
 
-internal interface ICharacterRepository : IRepository<Character>
+public interface ICharacterRepository : IRepository<Character>
 { }
