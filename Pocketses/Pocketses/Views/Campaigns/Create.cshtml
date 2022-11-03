@@ -4,32 +4,45 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<div class="p-4 text-gray-600">
+    <h1 class="page-title">
+        Create
+    </h1>
 
-<h4>Campaign</h4>
+    <div class="pb-8">
 
-<hr />
+        <h4 class="text-xl font-bold text-gray-400 pb-4">
+            Campaign
+        </h4>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+
+        <div class="shadow sm:rounded-lg p-4">
+
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-red-600" />
+
+                <div class="mb-4">
+                    <label asp-for="Name" class="block text-gray-700 text-sm font-bold mb-2"></label>
+                    <input asp-for="Name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                    <span asp-validation-for="Name" class="text-red-600"></span>
+                </div>
+
+
+                <input type="submit" value="Create" class="btn btn-blue" />
+
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index" class="btn btn-blue">
+            Back to List
+        </a>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

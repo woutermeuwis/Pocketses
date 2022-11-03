@@ -4,35 +4,40 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Pocketses</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/dist/output.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Pocketses</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+        <nav class="flex items-center justify-between flex-wrap bg-teal-500 p-6">
+            <div class="flex items-center flex-shrink-0 text-white mr-6">
+                <span class="font-semibold text-xl tracking-tight">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                        Pocketses
+                    </a>
+                </span>
+            </div>
+            <div class="block lg:hidden">
+                <button class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
+                    <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" /></svg>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow 1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Campaigns" asp-action="Index">Campaigns</a>
-                        </li>
-                    </ul>
+            </div>
+            <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+                <div class="text-sm lg:flex-grow">
+                    <a class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4" asp-area="" asp-controller="Home" asp-action="Index">
+                        Home
+                    </a>
+                    <a class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4" asp-area="" asp-controller="Home" asp-action="Privacy">
+                        Privacy
+                    </a>
+                    <a class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4" asp-area="" asp-controller="Campaigns" asp-action="Index">
+                        Campaigns
+                    </a>
                 </div>
             </div>
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3 w-screen">
             @RenderBody()
         </main>
     </div>
@@ -43,7 +48,6 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/js/main.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
