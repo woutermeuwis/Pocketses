@@ -351,3 +351,4 @@ MigrationBackup/
 .idea
 Pocketses/Pocketses/wwwroot/lib
 .DS_Store
+Pocketses/Pocketses/wwwroot/css/dist/output.css
