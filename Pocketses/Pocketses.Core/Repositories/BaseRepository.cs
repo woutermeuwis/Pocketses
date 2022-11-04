@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pocketses.Core.DataAccessLayer;
+using Pocketses.Core.Extensions;
 using Pocketses.Core.Models.Specifications;
 
 namespace Pocketses.Core.Repositories;
@@ -33,7 +34,10 @@ public class BaseRepository<T> where T : class
 
     public Task<List<T>> GetAllAsync(ISpecification<T> specification)
     {
-        return Table.Where(x => specification.IsSatisfiedBy(x)).ToListAsync();
+        return Table
+            .AsQueryable()
+            .EvaluateSpecification(specification)
+            .ToListAsync();
     }
 
     public async Task<T> UpdateAsync(T entity)
@@ -50,5 +54,5 @@ public class BaseRepository<T> where T : class
         await SaveChangesAsync();
     }
 
-    protected Task SaveChangesAsync() =>  Context.SaveChangesAsync();
+    protected Task SaveChangesAsync() => Context.SaveChangesAsync();
 }

@@ -1,18 +1,11 @@
-﻿namespace Pocketses.Core.Models.Specifications.Campaigns
-{
-    internal class CampaignNameSpecification : ISpecification<Campaign>
-    {
-        private string _name;
-        private StringComparison _comparisonType;
-        public CampaignNameSpecification(string name, StringComparison comparisonType = StringComparison.InvariantCultureIgnoreCase)
-        {
-            _name = name;
-            _comparisonType = comparisonType;
-        }
+﻿using Microsoft.EntityFrameworkCore;
 
-        public bool IsSatisfiedBy(Campaign campaign)
-        {
-            return campaign.Name.Contains(_name, _comparisonType);
-        }
+namespace Pocketses.Core.Models.Specifications.Campaigns
+{
+    internal class CampaignNameSpecification : BaseSpecification<Campaign>
+    {
+        public CampaignNameSpecification(string name)
+            : base(c => EF.Functions.Like(c.Name, $"%{name}%"))
+        { }
     }
 }
