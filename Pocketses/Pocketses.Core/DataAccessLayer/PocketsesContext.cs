@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Pocketses.Core.Models;
 
 namespace Pocketses.Core.DataAccessLayer;
 
-public class PocketsesContext : DbContext
+public class PocketsesContext : IdentityDbContext
 {
     public PocketsesContext(DbContextOptions<PocketsesContext> contextOptions) : base(contextOptions)
     {

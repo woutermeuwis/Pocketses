@@ -9,5 +9,11 @@ module.exports = {
     variants: {
         extend: {}
     },
-    plugins: []
+    plugins: [],
+    safelist: [
+        {
+            pattern: /./,
+            variantns: ['sm', 'md', 'lg', 'xl', '2xl']
+        }
+    ]
 }

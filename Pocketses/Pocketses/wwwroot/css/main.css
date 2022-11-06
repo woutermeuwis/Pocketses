@@ -28,4 +28,8 @@
     .page-title {
         @apply text-5xl font-bold uppercase pb-8;
     }
+
+    .input-validation-error {
+        @apply border-red-600
+    }
 }

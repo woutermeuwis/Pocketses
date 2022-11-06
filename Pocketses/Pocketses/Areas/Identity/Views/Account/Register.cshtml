@@ -1,0 +1,72 @@
+﻿@model Pocketses.Web.Areas.Identity.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="flex flex-col justify-center items-center content-center py-24">
+
+    <h1 class="page-title">
+        @ViewData["Title"]
+    </h1>
+
+    <div class="w-full max-w-xs">
+
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+              asp-action="Register">
+
+            <div asp-validation-summary="ModelOnly" class="text-red-600"></div>
+
+            <div class="mb-4">
+                <label asp-for="Email" class="block text-gray-700 text-sm font-bold mb-2">
+                    @Html.DisplayNameFor(model=>model.Email)
+                </label>
+
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                       asp-for="Email" autocomplete="username" placeholder="Email" />
+
+                <span asp-validation-for="Email" class="text-red-600"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Password" class="block text-gray-700 text-sm font-bold mb-2">
+                    @Html.DisplayNameFor(model=>model.Password)
+                </label>
+
+                <input class="shadow border appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                       asp-for="Password" autocomplete="new-password"placeholder="Password" />
+
+                <span asp-validation-for="Password" class="text-red-600"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="ConfirmPassword" class="block text-gray-700 text-sm font-bold mb-2">
+                    @Html.DisplayNameFor(model=>model.ConfirmPassword)
+                </label>
+
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                       asp-for="ConfirmPassword" autocomplete="new-password" placeholder="Password" />
+
+                <span asp-validation-for="ConfirmPassword" class="text-red-600"></span>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <input type="submit" value="Register" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"></input>
+            </div>
+
+            <div class="relative">
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
