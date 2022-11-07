@@ -7,7 +7,7 @@ namespace Pocketses.Core.Extensions
     {
         public static IQueryable<TEntity> EvaluateSpecification<TEntity>(this IQueryable<TEntity> query, ISpecification<TEntity> specification)
         {
-            if (specification is null)
+            if (specification is null || (query is null))
                 return query;
 
             if(specification.Filter is not null)

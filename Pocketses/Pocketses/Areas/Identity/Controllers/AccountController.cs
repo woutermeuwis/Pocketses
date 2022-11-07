@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Pocketses.Core.Services.Interfaces;
 using Pocketses.Web.Areas.Identity.Models;
-using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 
@@ -15,17 +14,17 @@ public class AccountController : Controller
     #region dependencies
 
     private readonly ILogger<AccountController> _logger;
-    private readonly IEmailSender _emailSender;
+    private readonly IEmailService _emailService;
 
     private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
 
     #endregion
 
-    public AccountController(ILogger<AccountController> logger, IEmailSender emailSender, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+    public AccountController(ILogger<AccountController> logger, IEmailService emailService, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
     {
         _logger = logger;
-        _emailSender = emailSender;
+        _emailService = emailService;
 
         _userManager = userManager;
         _signInManager = signInManager;
@@ -39,6 +38,12 @@ public class AccountController : Controller
         {
             ReturnUrl = returnUrl
         };
+        return View(vm);
+    }
+
+    public ActionResult ConfirmEmail(string email)
+    {
+        var vm = new ConfirmEmailViewModel { Email = email };
         return View(vm);
     }
 
@@ -69,7 +74,6 @@ public class AccountController : Controller
         if (!ModelState.IsValid)
             return View(vm);
 
-
         var user = new IdentityUser
         {
             UserName = vm.Email,
@@ -86,22 +90,40 @@ public class AccountController : Controller
 
         _logger.LogInformation("User created a new account with password");
 
-        var userId = await _userManager.GetUserIdAsync(user);
-
-        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-        var callbackUrl = Url.Action("RegisterConfirmation", "Account", values: new { area = "Identity", userId = userId, code = code, returnUrl = vm.ReturnUrl }, Request.Scheme);
-
-        await _emailSender.SendEmailAsync(vm.Email, "Confirm your email", $"Please confirm your account by <a href={HtmlEncoder.Default.Encode(callbackUrl)}>clicking here</a>.");
+        await SendConfirmationEmail(user, vm.ReturnUrl);
 
         if (_userManager.Options.SignIn.RequireConfirmedAccount)
-            return RedirectToAction("RegisterConfirm", new { email = vm.Email, returnUrl = vm.ReturnUrl });
+            return RedirectToAction(nameof(ConfirmEmail), "Account", new { vm.Email });
         else
         {
             await _signInManager.SignInAsync(user, isPersistent: false);
             return LocalRedirect(vm.ReturnUrl);
         }
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> RequestEmailConfirmation(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        await SendConfirmationEmail(user, string.Empty);
+        return RedirectToAction(nameof(Login), "Account");
+    }
+
+    #endregion
+
+    #region Helpers
+
+    private async Task SendConfirmationEmail(IdentityUser user, string returnUrl)
+    {
+        var userId = await _userManager.GetUserIdAsync(user);
+
+        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+        var callbackUrl = Url.Action("RegisterConfirmation", "Account", values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl }, Request.Scheme);
+        if (callbackUrl is not null)
+            await _emailService.SendMail(user.Email, "Confirm your email", $"Please confirm your account by <a href={HtmlEncoder.Default.Encode(callbackUrl)}>clicking here</a>.");
     }
 
     #endregion

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Pocketses.Core.DataAccessLayer;
 using Autofac.Core;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Pocketses.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,6 +78,15 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
         options.SlidingExpiration = true;
     });
 
+    services.Configure<MailKitEmailSenderOptions>(options =>
+    {
+        options.HostAddress = configuration["ExternalProviders:MailKit:SMTP:Address"];
+        options.HostPort = Convert.ToInt32(configuration["ExternalProviders:MailKit:SMTP:Port"]);
+        options.HostUserName = configuration["ExternalProviders:MailKit:SMTP:Account"];
+        options.HostPassword = configuration["ExternalProviders:MailKit:SMTP:Password"];
+        options.SenderEmail = configuration["ExternalProviders:MailKit:SMTP:SenderEmail"];
+        options.SenderName = configuration["ExternalProviders:MailKit:SMTP:SenderPassword"];
+    });
 }
 
 void MapControllerRoutes(WebApplication app)
