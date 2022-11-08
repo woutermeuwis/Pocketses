@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Pocketses.Core.Services.Interfaces;
@@ -36,28 +37,51 @@ public class AccountController : Controller
     {
         var vm = new RegisterViewModel
         {
-            ReturnUrl = returnUrl
+            ReturnUrl = returnUrl ?? Url.Content("~/")
         };
         return View(vm);
     }
 
-    public ActionResult ConfirmEmail(string email)
+    public async Task<ActionResult> RegisterConfirmation(string email)
     {
-        var vm = new ConfirmEmailViewModel { Email = email };
+        if (email is null)
+            return RedirectToAction(nameof(LogIn));
+
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user is null)
+            return RedirectToAction(nameof(LogIn));
+
+        return View();
+    }
+
+    public async Task<ActionResult> LogIn(string? email, string? returnUrl)
+    {
+        // clear any external provider cookie to ensure clean login flow
+        await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+        // fetch external providers
+        var externalProviders = await _signInManager.GetExternalAuthenticationSchemesAsync();
+
+        var vm = new LoginViewModel
+        {
+            Email = email,
+            ReturnUrl = returnUrl ?? Url.Content("~/"),
+            ExternalLogins = externalProviders.ToList()
+        };
         return View(vm);
     }
 
-    public ActionResult RegisterConfirmation()
+    public ActionResult LogOut()
     {
         return View();
     }
 
-    public ActionResult Login()
+    public ActionResult ForgotPassword()
     {
         return View();
     }
 
-    public ActionResult Logout()
+    public ActionResult ResendConfirmation()
     {
         return View();
     }
@@ -65,12 +89,11 @@ public class AccountController : Controller
     #endregion
 
     #region Actions
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Register(RegisterViewModel vm)
     {
-        vm.ReturnUrl ??= Url.Content("~/");
-
         if (!ModelState.IsValid)
             return View(vm);
 
@@ -93,7 +116,7 @@ public class AccountController : Controller
         await SendConfirmationEmail(user, vm.ReturnUrl);
 
         if (_userManager.Options.SignIn.RequireConfirmedAccount)
-            return RedirectToAction(nameof(ConfirmEmail), "Account", new { vm.Email });
+            return RedirectToAction(nameof(RegisterConfirmation), "Account", new { vm.Email });
         else
         {
             await _signInManager.SignInAsync(user, isPersistent: false);
@@ -103,11 +126,43 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> RequestEmailConfirmation(string email)
+    public async Task<ActionResult> ConfirmEmail(string userId, string code, string? returnUrl)
     {
-        var user = await _userManager.FindByEmailAsync(email);
-        await SendConfirmationEmail(user, string.Empty);
-        return RedirectToAction(nameof(Login), "Account");
+        if (userId is null || code is null)
+            return RedirectToAction(nameof(LogIn));
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+            return RedirectToAction(nameof(LogIn));
+
+        var token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+        if (!result.Succeeded)
+            return RedirectToAction(nameof(LogIn));
+
+        await _signInManager.SignInAsync(user, isPersistent: false);
+
+        returnUrl ??= Url.Content("~/");
+        return LocalRedirect(returnUrl);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> LogIn(LoginViewModel vm)
+    {
+        if (!ModelState.IsValid)
+            return View(vm);
+
+        var result = await _signInManager.PasswordSignInAsync(vm.Email, vm.Password, vm.RememberMe, lockoutOnFailure: false);
+        if (!result.Succeeded)
+        {
+            ModelState.AddModelError(string.Empty, "Invalid login attempt");
+            return View(vm);
+        }
+
+        _logger.LogInformation("User logged in.");
+        return LocalRedirect(vm.ReturnUrl);
+
     }
 
     #endregion
@@ -121,7 +176,7 @@ public class AccountController : Controller
         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
-        var callbackUrl = Url.Action("RegisterConfirmation", "Account", values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl }, Request.Scheme);
+        var callbackUrl = Url.Action("ConfirmEmail", "Account", values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl }, Request.Scheme);
         if (callbackUrl is not null)
             await _emailService.SendMail(user.Email, "Confirm your email", $"Please confirm your account by <a href={HtmlEncoder.Default.Encode(callbackUrl)}>clicking here</a>.");
     }

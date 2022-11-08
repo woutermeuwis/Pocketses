@@ -18,9 +18,7 @@
             <div asp-validation-summary="ModelOnly" class="text-red-600"></div>
 
             <div class="mb-4">
-                <label asp-for="Email" class="block text-gray-700 text-sm font-bold mb-2">
-                    @Html.DisplayNameFor(model=>model.Email)
-                </label>
+                <label asp-for="Email" class="block text-gray-700 text-sm font-bold mb-2"></label>
 
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                        asp-for="Email" autocomplete="username" placeholder="Email" />
@@ -29,20 +27,16 @@
             </div>
 
             <div class="mb-4">
-                <label asp-for="Password" class="block text-gray-700 text-sm font-bold mb-2">
-                    @Html.DisplayNameFor(model=>model.Password)
-                </label>
+                <label asp-for="Password" class="block text-gray-700 text-sm font-bold mb-2"></label>
 
                 <input class="shadow border appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                       asp-for="Password" autocomplete="new-password"placeholder="Password" />
+                       asp-for="Password" autocomplete="new-password" placeholder="Password" />
 
                 <span asp-validation-for="Password" class="text-red-600"></span>
             </div>
 
             <div class="mb-4">
-                <label asp-for="ConfirmPassword" class="block text-gray-700 text-sm font-bold mb-2">
-                    @Html.DisplayNameFor(model=>model.ConfirmPassword)
-                </label>
+                <label asp-for="ConfirmPassword" class="block text-gray-700 text-sm font-bold mb-2"></label>
 
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                        asp-for="ConfirmPassword" autocomplete="new-password" placeholder="Password" />
@@ -50,12 +44,7 @@
                 <span asp-validation-for="ConfirmPassword" class="text-red-600"></span>
             </div>
 
-            <div class="flex items-center justify-between">
-                <input type="submit" value="Register" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"></input>
-            </div>
-
-            <div class="relative">
-            </div>
+            <input type="submit" value="Register" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" />
 
 
         </form>

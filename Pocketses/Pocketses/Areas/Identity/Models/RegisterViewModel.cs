@@ -21,6 +21,6 @@ namespace Pocketses.Web.Areas.Identity.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string? ConfirmPassword { get; set; }
-        public string? ReturnUrl { get; set; }
+        public string ReturnUrl { get; set; } = "";
     }
 }
