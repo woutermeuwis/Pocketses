@@ -9,7 +9,7 @@ public static class SeedData
     public static void Initialize(IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.CreateScope();
-        using var ctx = new PocketsesContext(scope.ServiceProvider.GetRequiredService<DbContextOptions<PocketsesContext>>());
+        using var ctx = new PocketsesContext(scope.ServiceProvider.GetRequiredService<DbContextOptions<PocketsesContext>>(), null);
 
         if (ctx.Campaigns.Any())
             return; // DB has been seeded already
