@@ -10,6 +10,7 @@ using Pocketses.Api;
 using Pocketses.Core;
 using Pocketses.Core.DataAccessLayer;
 using System.Text;
+using Pocketses.Core.Models;
 
 WebApplication.CreateBuilder(args)
     .ConfigureServices()
@@ -78,7 +79,7 @@ public static class ProgramExtensions
 
     private static void AddAuthentication(this IServiceCollection services, IConfiguration config)
     {
-        services.AddIdentity<IdentityUser, IdentityRole>()
+        services.AddIdentity<User, IdentityRole>()
             .AddEntityFrameworkStores<PocketsesContext>();
 
         services.AddAuthentication(options =>
