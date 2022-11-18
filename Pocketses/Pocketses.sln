@@ -5,7 +5,9 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pocketses.Core", "Pocketses.Core\Pocketses.Core.csproj", "{38053744-5919-4422-91D9-B4FE3739D4B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pocketses.Api", "Pocketses.Api\Pocketses.Api.csproj", "{35B30824-54BF-4408-9AAE-6CF70F4336BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pocketses.Api", "Pocketses.Api\Pocketses.Api.csproj", "{35B30824-54BF-4408-9AAE-6CF70F4336BB}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A9ED4430-7094-4281-9EFD-02CA619C2644}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{35B30824-54BF-4408-9AAE-6CF70F4336BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35B30824-54BF-4408-9AAE-6CF70F4336BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35B30824-54BF-4408-9AAE-6CF70F4336BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9ED4430-7094-4281-9EFD-02CA619C2644}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9ED4430-7094-4281-9EFD-02CA619C2644}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9ED4430-7094-4281-9EFD-02CA619C2644}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9ED4430-7094-4281-9EFD-02CA619C2644}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

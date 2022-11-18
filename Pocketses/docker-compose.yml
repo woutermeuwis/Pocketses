@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  pocketses.api:
+    image: ${DOCKER_REGISTRY-}pocketsesapi
+    build:
+      context: .
+      dockerfile: Pocketses.Api/Dockerfile
