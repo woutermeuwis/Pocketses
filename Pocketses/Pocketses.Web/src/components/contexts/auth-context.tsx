@@ -3,7 +3,7 @@ import React, { ReactNode, useCallback, useContext, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom';
 import useLocalStorageState from 'use-local-storage-state'
 import { apiRoutes } from '../../api/apiRoutes';
-import LoginPage from '../../Pages/authentication/loginPage';
+import LoginPage from '../../pages/authentication/loginPage';
 
 type AuthContextProps = {
     token: string | null;
