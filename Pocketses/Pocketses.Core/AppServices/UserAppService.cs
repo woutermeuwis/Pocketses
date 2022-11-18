@@ -70,7 +70,8 @@ public sealed class UserAppService : IUserAppService
 			new(JwtRegisteredClaimNames.Iat, utcNow.ToString(CultureInfo.InvariantCulture)),
 			new("picture", user.Image),
 			new(JwtRegisteredClaimNames.GivenName, user.FirstName),
-			new(JwtRegisteredClaimNames.FamilyName, user.LastName)
+			new(JwtRegisteredClaimNames.FamilyName, user.LastName),
+			new(JwtRegisteredClaimNames.Email, user.Email)
 		};
 
 		var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));

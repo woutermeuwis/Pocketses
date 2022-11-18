@@ -11,6 +11,8 @@ const Application = () => {
     const {logout, http} = useAuth();
     const user = useUser();
 
+    console.log(user)
+
     const fetchWeather = () => {
         http.get(apiRoutes.baseUrl + 'weatherforecast')
     }
@@ -24,8 +26,6 @@ const Application = () => {
     const userNavigation = [
         {name: 'Log out', href: '#', func: logout}
     ]
-
-    const profileImg = "https://st3.depositphotos.com/9998432/13335/v/600/depositphotos_133352010-stock-illustration-default-placeholder-man-and-woman.jpg"
 
     const ToNavigationItem = ({name, href, current}: { name: string, href: string, current: boolean }) => {
         return current
@@ -93,22 +93,27 @@ const Application = () => {
 
                 </div>
 
-                {/* profile dropdown */}
-                <Menu as="div" className="relative ml-3">
+                <div className="hidden md:block">
+                    <div className="ml-4 flex items-center md:ml-6">
+                        {/* profile dropdown */}
+                        <Menu as="div" className="relative ml-3">
+                            <div>
+                                <Menu.Button
+                                    className="flex items-center max-w-xs rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                                    <img className="h-8 w-8 rounded-full" src={user.image}/>
+                                </Menu.Button>
+                            </div>
 
-                    <Menu.Button
-                        className="max-w-xs rounded-full bg-gray-800 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                        <img className="h-8 w-8 rounded-full" src={profileImg}/>
-                    </Menu.Button>
+                            <UserNavigationTransition>
+                                <Menu.Items
+                                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                    {userNavigation.map(ToUserNavigationItem)}
+                                </Menu.Items>
+                            </UserNavigationTransition>
 
-                    <UserNavigationTransition>
-                        <Menu.Items
-                            className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {userNavigation.map(ToUserNavigationItem)}
-                        </Menu.Items>
-                    </UserNavigationTransition>
-
-                </Menu>
+                        </Menu>
+                    </div>
+                </div>
             </>
         );
     }
@@ -163,10 +168,11 @@ const Application = () => {
                             <div className="border-t border-gray-700 pt-4 pb-3">
                                 <div className="flex items-center px-5">
                                     <div className="flex-shrink-0">
-                                        <img className="h-10 w-10 rounded-full" src={profileImg}/>
+                                        <img className="h-10 w-10 rounded-full" src={user.image}/>
                                     </div>
                                     <div className="ml-3">
-                                        <div className="text-base font-medium leading-none text-white">{user.name}</div>
+                                        <div
+                                            className="text-base font-medium leading-none text-white">{user.givenName} {user.familyName}</div>
                                         <div
                                             className="text-sm font-medium leading-none text-gray-400">{user.email}</div>
                                     </div>

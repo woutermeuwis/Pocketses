@@ -23,8 +23,6 @@ public class PocketsesContext : IdentityDbContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        System.Diagnostics.Debug.Write(_httpContextAccessor.HttpContext.User.Identity.Name);
-
         var entries = ChangeTracker
             .Entries()
             .Where(e => e.Entity is AuditedEntity && e.State is EntityState.Added or EntityState.Modified);
