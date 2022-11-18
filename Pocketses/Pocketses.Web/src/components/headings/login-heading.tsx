@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 
-const LoginHeading = (props: { children: ReactNode }) => {
+const LoginHeading = (props: PropsWithChildren) => {
     return (
         <h1 className="text-4xl font-bold uppercase pb-8 text-center">
             {props.children}

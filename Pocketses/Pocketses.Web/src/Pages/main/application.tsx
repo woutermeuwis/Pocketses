@@ -1,17 +1,15 @@
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Fragment, ReactNode } from "react";
+import { Fragment, PropsWithChildren, ReactNode } from "react";
 import { useAuth } from "../../components/contexts/auth-context";
 import { useUser } from "../../components/contexts/user-context";
 import { Bars3Icon, XMarkIcon, BriefcaseIcon } from '@heroicons/react/24/outline'
 import AppRouter from "../infrastructure/app-router";
 import { NavLink } from "react-router-dom"
 
-
 const Application = () => {
 
     const { logout } = useAuth();
     const user = useUser();
-
 
     const navigation = [
         { name: 'Dashboard', href: 'dashboard' },
@@ -23,14 +21,14 @@ const Application = () => {
         { name: 'Log out', href: '', func: logout }
     ]
 
-    const ToNavigationItem = ({ name, href, current }: { name: string, href: string, current: boolean }) => {
+    const ToNavigationItem = ({ name, href }: { name: string, href: string}) => {
         return (<NavLink key={name} to={href} className={({ isActive }) => isActive
             ? "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
             : "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
         }>{name}</NavLink>);
     }
 
-    const ToNavigationMobileButton = ({ name, href, current }: { name: string, href: string, current: boolean }) => {
+    const ToNavigationMobileButton = ({ name, href }: { name: string, href: string }) => {
         return (<NavLink key={name} to={href} className={({ isActive }) => isActive
             ? "bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
             : "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
@@ -54,7 +52,7 @@ const Application = () => {
         </Disclosure.Button>);
     }
 
-    const UserNavigationTransition = ({ children }: { children: ReactNode }) => {
+    const UserNavigationTransition = (props: PropsWithChildren) => {
         return (
             <Transition as={Fragment}
                 enter="transition ease-out duration-100"
@@ -63,7 +61,7 @@ const Application = () => {
                 leave="transition ease-in duration-75"
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95">
-                {children}
+                {props.children}
             </Transition>
         )
     }
@@ -125,13 +123,7 @@ const Application = () => {
         );
     }
 
-    const ApplicationContent = ({ children }: { children: ReactNode }) => {
-        return (
-            <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
-                {children}
-            </div>
-        );
-    }
+
 
     return (
         <div className="min-h-full">
@@ -170,9 +162,7 @@ const Application = () => {
                 )}
             </Disclosure>
 
-            <ApplicationContent>
-                <AppRouter />
-            </ApplicationContent>
+            <AppRouter />
 
         </div>
     )

@@ -1,8 +1,8 @@
-import React, {ReactNode, useContext} from 'react'
-import {useAuth} from './auth-context';
-import jwt, {JwtDecodeOptions} from "jwt-decode"
+import React, { PropsWithChildren, useContext } from 'react'
+import { useAuth } from './auth-context';
+import jwt from "jwt-decode"
 
-interface UserContextProps  {
+interface UserContextProps {
     email: string;
     name: string;
     givenName: string;
@@ -11,18 +11,18 @@ interface UserContextProps  {
     image: string
 }
 
-interface JWT  {
+interface JWT {
     email: string;
     family_name: string;
     given_name: string;
     unique_name: string;
     sub: string;
-    picture:string;
+    picture: string;
 }
 
 const UserContext = React.createContext<UserContextProps | undefined>(undefined);
 
-const UserProvider = ({children}: { children: ReactNode }) => {
+const UserProvider = (props: PropsWithChildren) => {
 
     const getUser = (token: string | null): UserContextProps | undefined => {
         if (!token)
@@ -41,7 +41,7 @@ const UserProvider = ({children}: { children: ReactNode }) => {
 
     return (
         <UserContext.Provider value={getUser(useAuth().token)}>
-            {children}
+            {props.children}
         </UserContext.Provider>
     )
 }
@@ -56,4 +56,4 @@ function useUser(): UserContextProps {
     return ctx;
 }
 
-export {UserProvider, useUser}
+export { UserProvider, useUser }

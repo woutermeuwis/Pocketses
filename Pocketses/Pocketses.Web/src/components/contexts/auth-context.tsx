@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import React, { ReactNode, useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, PropsWithChildren } from 'react'
 import { useNavigate } from 'react-router-dom';
 import useLocalStorageState from 'use-local-storage-state'
 import { apiRoutes } from '../../api/apiRoutes';
@@ -14,7 +14,7 @@ type AuthContextProps = {
 
 const AuthContext = React.createContext<AuthContextProps | undefined>(undefined);
 
-const AuthProvider = ({ children }: { children: ReactNode }) => {
+const AuthProvider = (props: PropsWithChildren) => {
     const [token, setToken] = useLocalStorageState<string | null>('token', { defaultValue: null });
     const navigate = useNavigate();
 
@@ -61,7 +61,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     return (
         <AuthContext.Provider value={{ token, logout, authenticate, http }}>
-            {!token ? <LoginPage /> : children}
+            {!token ? <LoginPage /> : props.children}
         </AuthContext.Provider>
     )
 }

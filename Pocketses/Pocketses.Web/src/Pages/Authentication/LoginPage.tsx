@@ -1,6 +1,6 @@
-import { CredentialResponse, GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import { useAuth } from "../../components/contexts/auth-context";
-import LoginHeading from "../../components/headings/loginHeading";
+import LoginHeading from "../../components/headings/login-heading";
 
 const LoginPage = () => {
     const { authenticate, logout } = useAuth();
