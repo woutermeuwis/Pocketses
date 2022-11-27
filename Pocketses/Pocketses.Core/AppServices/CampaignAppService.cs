@@ -29,12 +29,12 @@ public class CampaignAppService : ICampaignAppService
         return _campaignRepository.GetAsync(id);
     }
 
-    public Task CreateAsync(Campaign campaign)
+    public Task<Campaign> CreateAsync(Campaign campaign)
     {
         return _campaignRepository.CreateAsync(campaign);
     }
 
-    public Task UpdateAsync(Campaign toUpdate)
+    public Task<Campaign> UpdateAsync(Campaign toUpdate)
     {
         return _campaignRepository.UpdateAsync(toUpdate);
     }

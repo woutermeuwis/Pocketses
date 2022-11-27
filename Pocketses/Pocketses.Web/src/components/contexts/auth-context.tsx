@@ -2,8 +2,8 @@ import axios, { AxiosInstance } from 'axios';
 import React, { useCallback, useContext, useMemo, PropsWithChildren } from 'react'
 import { useNavigate } from 'react-router-dom';
 import useLocalStorageState from 'use-local-storage-state'
-import { apiRoutes } from '../../api/apiRoutes';
-import LoginPage from '../../pages/authentication/loginPage';
+import { apiRoutes } from '../../api/api-routes';
+import LoginPage from '../../Pages/Authentication/login-page';
 
 type AuthContextProps = {
     token: string | null;
@@ -24,7 +24,7 @@ const AuthProvider = (props: PropsWithChildren) => {
     }, [navigate, setToken]);
 
     const authenticate = (code: string | null) => {
-        const url = apiRoutes.baseUrl + apiRoutes.auth;
+        const url = apiRoutes.base + apiRoutes.auth;
         const config = {
             headers: {
                 'Content-Type': 'application/json'
@@ -43,13 +43,15 @@ const AuthProvider = (props: PropsWithChildren) => {
 
     const http = useMemo(() => {
         const http = axios.create({
+            baseURL: apiRoutes.base,
             headers: {
-                Authorization: 'Bearer ' + token || ''
+                Authorization: 'Bearer ' + token || '',
+                'Content-Type': 'application/json'
             }
         });
 
         http.interceptors.response.use(undefined, (error) => {
-            if (error.response.status == 404) {
+            if (error.response.status == 401) {
                 logout();
                 return;
             }

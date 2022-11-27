@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Pocketses.Core.Dto.Campaign;
+using Pocketses.Core.Dto.Campaign.Request;
+using Pocketses.Core.Dto.Campaign.Response;
 using Pocketses.Core.Extensions;
 using Pocketses.Core.Models;
 

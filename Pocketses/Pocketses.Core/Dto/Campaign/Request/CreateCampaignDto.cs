@@ -1,4 +1,4 @@
-﻿namespace Pocketses.Core.Dto.Campaign;
+﻿namespace Pocketses.Core.Dto.Campaign.Request;
 
 public sealed class CreateCampaignDto
 {

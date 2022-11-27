@@ -1,6 +1,6 @@
-import LoginPage from "./pages/authentication/loginPage";
+import LoginPage from "./Pages/Authentication/login-page";
 import { useAuth } from "./components/contexts/auth-context";
-import Application from "./pages/main/application";
+import Application from "./components/infrastructure/application";
 
 function App() {
     const auth = useAuth();

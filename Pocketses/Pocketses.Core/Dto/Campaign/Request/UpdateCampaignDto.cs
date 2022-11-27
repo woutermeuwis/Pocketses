@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pocketses.Core.Dto.Campaign
+namespace Pocketses.Core.Dto.Campaign.Request
 {
     internal class UpdateCampaignDto
     {
