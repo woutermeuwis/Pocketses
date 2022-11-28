@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Pocketses.Core.Models;
 using Pocketses.Core.Models.Base;
 
@@ -23,6 +24,7 @@ public class PocketsesContext : IdentityDbContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        var userId = _httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
         var entries = ChangeTracker
             .Entries()
             .Where(e => e.Entity is AuditedEntity && e.State is EntityState.Added or EntityState.Modified);
@@ -32,9 +34,11 @@ public class PocketsesContext : IdentityDbContext
             if (entry.State == EntityState.Added)
             {
                 ((AuditedEntity)entry.Entity).CreatedAtUtc = DateTime.UtcNow;
+                ((AuditedEntity)entry.Entity).CreatedBy = userId;
             }
 
             ((AuditedEntity)entry.Entity).UpdatedAtUtc = DateTime.UtcNow;
+            ((AuditedEntity)entry.Entity).UpdatedBy = userId;
         }
 
         return await base.SaveChangesAsync(cancellationToken);

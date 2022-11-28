@@ -1,28 +1,37 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Pocketses.Core.AppServices.Interfaces;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace Pocketses.Api.Controllers;
 
+/// <summary>
+/// Authorization
+/// </summary>
 [ApiController]
 [Route("authenticate")]
 public class AuthController : ControllerBase
 {
-    private readonly IUserAppService _userAppService;
-    private readonly ILogger<AuthController> _logger;
+	private readonly IUserAppService _userAppService;
+	private readonly ILogger<AuthController> _logger;
 
-    public AuthController(ILogger<AuthController> logger, IUserAppService userAppService)
-    {
-        _logger = logger;
-        _userAppService = userAppService;
-    }
+	/// <inheritdoc/>
+	public AuthController(ILogger<AuthController> logger, IUserAppService userAppService)
+	{
+		_logger = logger;
+		_userAppService = userAppService;
+	}
 
-    [HttpPost]
-    public async Task<ActionResult<string>> Post([FromBody] string token)
-    {
-        token = await _userAppService.SetUser(token);
-        return token == null
-            ? BadRequest()
-            : Ok(token);
-    }
+	/// <summary>
+	/// Logs in user with google auth
+	/// </summary>
+	/// <param name="token">Google auth token</param>
+	/// <response code="200">Returns JWT Access token</response>
+	/// <response code="400">Invalid token</response>
+	[HttpPost]
+	public async Task<ActionResult<string>> Post([FromBody] string token)
+	{
+		token = await _userAppService.SetUser(token);
+		return token == null
+			? BadRequest()
+			: Ok(token);
+	}
 }

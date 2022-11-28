@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pocketses.Core.Dto.Campaign.Request
 {
-    internal class UpdateCampaignDto
+    public sealed class UpdateCampaignDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

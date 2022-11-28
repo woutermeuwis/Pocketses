@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Pocketses.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Pocketses.Api.Controllers.AuthController">
+            <summary>
+            Authorization
+            </summary>
+        </member>
+        <member name="M:Pocketses.Api.Controllers.AuthController.#ctor(Microsoft.Extensions.Logging.ILogger{Pocketses.Api.Controllers.AuthController},Pocketses.Core.AppServices.Interfaces.IUserAppService)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Pocketses.Api.Controllers.AuthController.Post(System.String)">
+            <summary>
+            Logs in user with google auth
+            </summary>
+            <param name="token">Google auth token</param>
+            <response code="200">Returns JWT Access token</response>
+            <response code="400">Invalid token</response>
+        </member>
+        <member name="T:Pocketses.Api.Controllers.CampaignsController">
+            <summary>
+            Campaigns
+            </summary>
+        </member>
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.#ctor(Microsoft.Extensions.Logging.ILogger{Pocketses.Api.Controllers.CampaignsController},Pocketses.Core.AppServices.Interfaces.ICampaignAppService,AutoMapper.IMapper)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.GetCampaigns(System.String)">
+            <summary>
+            Get all Campaigns
+            </summary>
+            <param name="filter">Campaign name search query</param>
+            <response code="200">Returns the list of Campaigns</response>
+        </member>
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.GetCampaign(System.Guid)">
+            <summary>
+            Get Campaign details by Id
+            </summary>
+            <param name="id">The Id of the Campaign to get</param>
+            <response code="200">Returns the requested Campaign</response>
+            <response code="404">The requested campaign could not be found</response>
+        </member>
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.Create(Pocketses.Core.Dto.Campaign.Request.CreateCampaignDto)">
+            <summary>
+            Create a new Campaign
+            </summary>
+            <param name="createDto">The campaign to be created</param>
+            <response code="201">Returns the created campaign</response>
+        </member>
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.Delete(System.Guid)">
+            <summary>
+            Delete a Campaign
+            </summary>
+            <param name="id">The Id of the Campaign to be deleted</param>
+            <response code="200">The campaign was successfully deleted</response>	
+        </member>
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.Update(System.Guid,Pocketses.Core.Dto.Campaign.Request.UpdateCampaignDto)">
+            <summary>
+            Update a given Campaign
+            </summary>
+            <param name="id">The Id of the Campaign to update</param>
+            <param name="updateDto">The updated state of the Campaign</param>
+            <response code="200">Returns the updated Campaign.</response>
+            <response code="404">The given Campaign was not found.</response>
+            <response code="400">The given Campaign state did not match the requested resource.</response>
+        </member>
+        <member name="T:ProgramExtensions">
+            <summary>
+            Extensions class to simplify program config
+            </summary>
+        </member>
+        <member name="M:ProgramExtensions.ConfigureServices(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            Configure Services for the WebApplicationBuilder
+            </summary>
+        </member>
+        <member name="M:ProgramExtensions.ConfigureWebApplication(Microsoft.AspNetCore.Builder.WebApplication)">
+            <summary>
+            Configure WebApplication
+            </summary>
+        </member>
+    </members>
+</doc>
