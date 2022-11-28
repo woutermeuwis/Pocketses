@@ -1,14 +1,18 @@
 import {useState} from "react";
+import {Campaign} from "../../api/utils/campaign-utils";
 
-interface NewCampaignProps {
-    submit: (name: string) => void
+interface UpdateCampaignProps {
+    submit: (campaign: Campaign) => void,
+    current: Campaign
 }
 
-const NewCampaignForm = ({submit}: NewCampaignProps) => {
-    const [name, setName] = useState('');
+const UpdateCampaignForm = ({submit, current}: UpdateCampaignProps) => {
+    const [name, setName] = useState(current.name);
+    console.log(current)
 
     function submitForm(event: any) {
-        submit(name);
+        const campaign: Campaign = {id: current.id, name: name};
+        submit(campaign);
         event.preventDefault()
     }
 
@@ -45,4 +49,4 @@ const NewCampaignForm = ({submit}: NewCampaignProps) => {
     )
 }
 
-export default NewCampaignForm
+export default UpdateCampaignForm

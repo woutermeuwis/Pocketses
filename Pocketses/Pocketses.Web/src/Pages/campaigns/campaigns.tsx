@@ -3,13 +3,15 @@ import PageHeader from "../../components/layout/page-header";
 import {useModal} from "../../components/contexts/modal-provider";
 import NewCampaignForm from "../../components/forms/new-campaign-form";
 import {
+    Campaign,
     useCreateCampaign,
     useDeleteCampaign,
     useGetCampaigns,
     useUpdateCampaign
 } from "../../api/utils/campaign-utils";
-import {TrashIcon, PlusCircleIcon} from '@heroicons/react/24/outline'
+import {TrashIcon, PlusCircleIcon, PencilIcon} from '@heroicons/react/24/outline'
 import LoadingSpinner from "../../components/infrastructure/loading-spinner";
+import UpdateCampaignForm from "../../components/forms/update-campaign-form";
 
 const Campaigns = () => {
     const {showModal, closeModal} = useModal();
@@ -38,45 +40,10 @@ const Campaigns = () => {
         createCampaign({name});
     }
 
-    const Content = (<div className={"bg-slate-50 rounded-xl mx-auto my-4 w-fit "}>
-        <div className={"shadow-sm pt-8 flex justify-center"}>
-            <table className={"table-auto text-sm border-collapse"}>
-                <thead>
-                <tr>
-                    <th className={"border-b font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left"}>
-                        Id
-                    </th>
-                    <th className={"border-b font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left"}>
-                        Name
-                    </th>
-                    <th className={"border-b font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left"}>
-                        Actions
-                    </th>
-                </tr>
-                </thead>
-                <tbody className={"bg-white"}>
-                {campaigns.map((c) => (
-                    <tr key={c.id}>
-                        <td className={"border-b border-slate-100 p-4 pl-8 text-slate-500"}>
-                            {c.id}
-                        </td>
-                        <td className={"border-b border-slate-100 p-4 pl-8 text-slate-500"}>
-                            {c.name}
-                        </td>
-                        <td className={"border-b border-slate-100 p-4 pl-8"}>
-                            <div>
-                                <button className={"bg-red-400 hover:bg-red-600 p-2 m-2 rounded-md text-white"}
-                                        onClick={() => deleteCampaign({id: c.id})}>
-                                    <TrashIcon className={"block h-6 w-6"}/>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-        </div>
-    </div>);
+    const onUpdate = (campaign: Campaign) =>{
+        closeModal();
+        updateCampaign(campaign);
+    }
 
     return (
         <>
@@ -105,7 +72,52 @@ const Campaigns = () => {
                 </ul>)
             }
 
-            {Content}
+            (
+            <div className={"bg-slate-50 rounded-xl mx-auto my-4 w-fit "}>
+                <div className={"shadow-sm pt-8 flex justify-center"}>
+                    <table className={"table-auto text-sm border-collapse"}>
+                        <thead>
+                        <tr>
+                            <th className={"border-b font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left"}>
+                                Id
+                            </th>
+                            <th className={"border-b font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left"}>
+                                Name
+                            </th>
+                            <th className={"border-b font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left"}>
+                                Actions
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody className={"bg-white"}>
+                        {campaigns.map((c) => (
+                            <tr key={c.id}>
+                                <td className={"border-b border-slate-100 p-4 pl-8 text-slate-500"}>
+                                    {c.id}
+                                </td>
+                                <td className={"border-b border-slate-100 p-4 pl-8 text-slate-500"}>
+                                    {c.name}
+                                </td>
+                                <td className={"border-b border-slate-100 p-4 pl-8"}>
+                                    <div>
+                                        <button className={"bg-red-400 hover:bg-red-600 p-2 m-2 rounded-md text-white"}
+                                                onClick={() => deleteCampaign({id: c.id})}>
+                                            <TrashIcon className={"block h-6 w-6"}/>
+                                        </button>
+                                        <button className={"bg-blue-400 hover:bg-blue-600 p-2 m-2 rounded-md text-white"}
+                                                onClick={() => showModal(<UpdateCampaignForm submit={onUpdate} current={c}/>)}>
+                                            <PencilIcon className={"block h-6 w-6"}/>
+                                        </button>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            )
 
             {isLoading && <LoadingSpinner/>}
         </>

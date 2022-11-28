@@ -43,7 +43,7 @@ const updateCampaignConfig = (): MutationConfig<Campaign> => {
     const {http} = useAuth();
     const queryClient = useQueryClient();
     return {
-        mutationFn: ({id, name}) => http.patch(`${apiRoutes.campaigns}/${id}`, {name}).then(res => res.data),
+        mutationFn: ({id, name}) => http.patch(`${apiRoutes.campaigns}/${id}`, {id, name}).then(res => res.data),
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: [apiRoutes.campaigns]})
         }
