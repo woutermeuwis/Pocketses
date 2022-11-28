@@ -354,3 +354,5 @@ Pocketses/Pocketses/wwwroot/lib
 Pocketses/Pocketses/wwwroot/css/dist/output.css
 Pocketses/Pocketses/appsettings.json
 Pocketses/Pocketses.Web/.env
+Pocketses/Pocketses.Api/Pocketses.db-wal
+Pocketses/Pocketses.Api/Pocketses.db-shm
