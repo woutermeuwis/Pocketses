@@ -4,6 +4,7 @@ using Pocketses.Core.Extensions;
 using Pocketses.Core.Models.Specifications;
 
 namespace Pocketses.Core.Repositories;
+
 public class BaseRepository<T> where T : class
 {
 	protected PocketsesContext Context { get; set; }
@@ -15,24 +16,24 @@ public class BaseRepository<T> where T : class
 		Context = ctx;
 	}
 
-	public async Task<T> CreateAsync(T entity)
+	public async virtual Task<T> CreateAsync(T entity)
 	{
 		var added = await Table.AddAsync(entity);
 		await SaveChangesAsync();
 		return added.Entity;
 	}
 
-	public Task<T> GetAsync(Guid id)
+	public virtual Task<T> GetAsync(Guid id)
 	{
 		return Table.FindAsync(id).AsTask();
 	}
 
-	public Task<List<T>> GetAllAsync()
+	public virtual Task<List<T>> GetAllAsync()
 	{
 		return Table.ToListAsync();
 	}
 
-	public Task<List<T>> GetAllAsync(ISpecification<T> specification)
+	public virtual Task<List<T>> GetAllAsync(ISpecification<T> specification)
 	{
 		return Table
 			.AsQueryable()
@@ -40,14 +41,14 @@ public class BaseRepository<T> where T : class
 			.ToListAsync();
 	}
 
-	public async Task<T> UpdateAsync(T entity)
+	public async virtual Task<T> UpdateAsync(T entity)
 	{
 		var updated = Table.Update(entity);
 		await SaveChangesAsync();
 		return updated.Entity;
 	}
 
-	public async Task DeleteAsync(Guid id)
+	public virtual async Task DeleteAsync(Guid id)
 	{
 		var entity = await GetAsync(id);
 		if (entity is not null)

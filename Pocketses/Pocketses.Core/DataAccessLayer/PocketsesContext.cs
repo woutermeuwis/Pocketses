@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Pocketses.Core.Extensions;
 using Pocketses.Core.Models;
 using Pocketses.Core.Models.Base;
 
@@ -13,7 +14,6 @@ public class PocketsesContext : IdentityDbContext
 
     internal DbSet<User> Users { get; set; }
     internal DbSet<Campaign> Campaigns { get; set; }
-    internal DbSet<Player> Players { get; set; }
     internal DbSet<Character> Characters { get; set; }
 
 
@@ -24,7 +24,7 @@ public class PocketsesContext : IdentityDbContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var userId = _httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+	    var userId = _httpContextAccessor?.GetUserId();
         var entries = ChangeTracker
             .Entries()
             .Where(e => e.Entity is AuditedEntity && e.State is EntityState.Added or EntityState.Modified);

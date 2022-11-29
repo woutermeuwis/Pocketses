@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,6 +11,11 @@ using Pocketses.Core;
 using Pocketses.Core.DataAccessLayer;
 using Pocketses.Core.Models;
 using System.Text;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 
 WebApplication.CreateBuilder(args)
@@ -30,7 +37,7 @@ public static class ProgramExtensions
 		builder.ConfigureAutofac();
 		builder.ConfigureDatabase();
 
-		builder.Services.AddAuthentication(builder.Configuration);
+		AddAuthentication(builder.Services, builder.Configuration);
 		builder.Services.AddHttpContextAccessor();
 		builder.Services.AddControllers();
 		builder.Services.AddEndpointsApiExplorer();

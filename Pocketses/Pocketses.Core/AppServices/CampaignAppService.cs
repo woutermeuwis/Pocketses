@@ -1,5 +1,7 @@
-﻿using Pocketses.Core.AppServices.Interfaces;
+﻿using Microsoft.AspNetCore.Http;
+using Pocketses.Core.AppServices.Interfaces;
 using Pocketses.Core.Attributes;
+using Pocketses.Core.Extensions;
 using Pocketses.Core.Models;
 using Pocketses.Core.Models.Specifications.Campaigns;
 using Pocketses.Core.Repositories.Interfaces;
@@ -10,18 +12,19 @@ namespace Pocketses.Core.AppServices;
 public class CampaignAppService : ICampaignAppService
 {
     private readonly ICampaignRepository _campaignRepository;
+    private readonly IHttpContextAccessor _ctxAccessor;
 
-    public CampaignAppService(ICampaignRepository campaignRepository)
+    public CampaignAppService(ICampaignRepository campaignRepository, IHttpContextAccessor ctxAccessor)
     {
-        _campaignRepository = campaignRepository;
+	    _campaignRepository = campaignRepository;
+	    _ctxAccessor = ctxAccessor;
     }
 
     public Task<List<Campaign>> GetCampaignsAsync(string searchFilter)
     {
-        if (string.IsNullOrEmpty(searchFilter))
-            return _campaignRepository.GetAllAsync();
-        else
-            return _campaignRepository.GetAllAsync(new CampaignNameSpecification(searchFilter));
+	    return string.IsNullOrEmpty(searchFilter) 
+		    ? _campaignRepository.GetAllAsync() 
+		    : _campaignRepository.GetAllAsync(new CampaignNameSpecification(searchFilter));
     }
 
     public Task<Campaign> GetCampaignAsync(Guid id)
@@ -31,7 +34,7 @@ public class CampaignAppService : ICampaignAppService
 
     public Task<Campaign> CreateAsync(Campaign campaign)
     {
-        return _campaignRepository.CreateAsync(campaign);
+	    return _campaignRepository.CreateAsync(campaign);
     }
 
     public Task<Campaign> UpdateAsync(Campaign toUpdate)

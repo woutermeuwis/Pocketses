@@ -1,3 +1,5 @@
+using System;
+
 namespace Pocketses.Api
 {
     public class WeatherForecast

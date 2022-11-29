@@ -1,9 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Pocketses.Core.AppServices.Interfaces;
 using Pocketses.Core.Dto.Campaign.Request;
 using Pocketses.Core.Dto.Campaign.Response;
+using Pocketses.Core.Extensions;
 using Pocketses.Core.Models;
 
 namespace Pocketses.Api.Controllers;
@@ -17,15 +23,17 @@ namespace Pocketses.Api.Controllers;
 public class CampaignsController : ControllerBase
 {
 	private readonly ILogger<CampaignsController> _logger;
+	private readonly IHttpContextAccessor _httpContextAccessor;
 	private readonly ICampaignAppService _campaignAppService;
 	private readonly IMapper _mapper;
 
 	/// <inheritdoc/>
-	public CampaignsController(ILogger<CampaignsController> logger, ICampaignAppService campaignAppService, IMapper mapper)
+	public CampaignsController(ILogger<CampaignsController> logger, ICampaignAppService campaignAppService, IMapper mapper, IHttpContextAccessor httpContextAccessor)
 	{
 		_logger = logger;
 		_campaignAppService = campaignAppService;
 		_mapper = mapper;
+		_httpContextAccessor = httpContextAccessor;
 	}
 
 	/// <summary>
@@ -64,10 +72,18 @@ public class CampaignsController : ControllerBase
 	/// </summary>
 	/// <param name="createDto">The campaign to be created</param>
 	/// <response code="201">Returns the created campaign</response>
+	/// <response code="400">The dto was invalid</response>
 	[HttpPost]
 	public async Task<ActionResult<CampaignDto>> Create(CreateCampaignDto createDto)
 	{
+		var userId = _httpContextAccessor?.GetUserId();
+
+		if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(createDto?.Name))
+			return BadRequest();
+		
 		var campaign = _mapper.Map<Campaign>(createDto);
+		campaign.DungeonMasterId = userId;
+		
 		var created = await _campaignAppService.CreateAsync(campaign);
 		var createdDto = _mapper.Map<CampaignDto>(created);
 		return CreatedAtAction(nameof(GetCampaign), new { id = createdDto.Id }, createdDto);

@@ -10,18 +10,26 @@ namespace Pocketses.Core.Mapping
     {
         public CampaignProfile()
         {
-            CreateMap<Campaign, CampaignDto>();
+            CreateMap<Campaign, CampaignDto>()
+	            .MapFrom(c=>c.DmId, c=>c.DungeonMasterId)
+	            .MapFrom(c=>c.Dm, c=>c.DungeonMaster.UserName);
+
+            CreateMap<Campaign, CampaignDetailDto>()
+	            .MapFrom(c=>c.DmId, c=>c.DungeonMasterId)
+	            .MapFrom(c=>c.Dm, c=>c.DungeonMaster.UserName);
 
             CreateMap<CreateCampaignDto, Campaign>()
                 .IgnoreId()
                 .IgnoreAuditedEntity()
-                .Ignore(c=>c.Players)
-                .Ignore(c=>c.Characters);
+                .Ignore(c=>c.Characters)
+                .Ignore(c=>c.DungeonMaster)
+                .Ignore(c=>c.DungeonMasterId);
 
             CreateMap<UpdateCampaignDto, Campaign>()
                 .IgnoreAuditedEntity()
-                .Ignore(c=>c.Players)
-                .Ignore(c=>c.Characters);
+                .Ignore(c=>c.Characters)
+                .Ignore(c=>c.DungeonMaster)
+                .Ignore(c=>c.DungeonMasterId);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pocketses.Core.DataAccessLayer;
 
@@ -10,9 +11,10 @@ using Pocketses.Core.DataAccessLayer;
 namespace Pocketses.Core.Migrations
 {
     [DbContext(typeof(PocketsesContext))]
-    partial class PocketsesContextModelSnapshot : ModelSnapshot
+    [Migration("20221129221814_campaignDM")]
+    partial class campaignDM
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");

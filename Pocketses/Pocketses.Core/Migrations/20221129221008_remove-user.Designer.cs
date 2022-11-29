@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pocketses.Core.DataAccessLayer;
 
@@ -10,9 +11,10 @@ using Pocketses.Core.DataAccessLayer;
 namespace Pocketses.Core.Migrations
 {
     [DbContext(typeof(PocketsesContext))]
-    partial class PocketsesContextModelSnapshot : ModelSnapshot
+    [Migration("20221129221008_remove-user")]
+    partial class removeuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
@@ -227,9 +229,6 @@ namespace Pocketses.Core.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("DungeonMasterId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
@@ -240,8 +239,6 @@ namespace Pocketses.Core.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DungeonMasterId");
 
                     b.ToTable("Campaigns");
                 });
@@ -344,15 +341,6 @@ namespace Pocketses.Core.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Pocketses.Core.Models.Campaign", b =>
-                {
-                    b.HasOne("Pocketses.Core.Models.User", "DungeonMaster")
-                        .WithMany("DmCampaigns")
-                        .HasForeignKey("DungeonMasterId");
-
-                    b.Navigation("DungeonMaster");
-                });
-
             modelBuilder.Entity("Pocketses.Core.Models.Character", b =>
                 {
                     b.HasOne("Pocketses.Core.Models.Campaign", null)
@@ -363,11 +351,6 @@ namespace Pocketses.Core.Migrations
             modelBuilder.Entity("Pocketses.Core.Models.Campaign", b =>
                 {
                     b.Navigation("Characters");
-                });
-
-            modelBuilder.Entity("Pocketses.Core.Models.User", b =>
-                {
-                    b.Navigation("DmCampaigns");
                 });
 #pragma warning restore 612, 618
         }

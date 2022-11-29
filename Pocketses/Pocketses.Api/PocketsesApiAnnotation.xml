@@ -25,7 +25,7 @@
             Campaigns
             </summary>
         </member>
-        <member name="M:Pocketses.Api.Controllers.CampaignsController.#ctor(Microsoft.Extensions.Logging.ILogger{Pocketses.Api.Controllers.CampaignsController},Pocketses.Core.AppServices.Interfaces.ICampaignAppService,AutoMapper.IMapper)">
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.#ctor(Microsoft.Extensions.Logging.ILogger{Pocketses.Api.Controllers.CampaignsController},Pocketses.Core.AppServices.Interfaces.ICampaignAppService,AutoMapper.IMapper,Microsoft.AspNetCore.Http.IHttpContextAccessor)">
             <inheritdoc/>
         </member>
         <member name="M:Pocketses.Api.Controllers.CampaignsController.GetCampaigns(System.String)">
@@ -49,6 +49,7 @@
             </summary>
             <param name="createDto">The campaign to be created</param>
             <response code="201">Returns the created campaign</response>
+            <response code="400">The dto was invalid</response>
         </member>
         <member name="M:Pocketses.Api.Controllers.CampaignsController.Delete(System.Guid)">
             <summary>
