@@ -23,6 +23,7 @@ public class CampaignRepository : BaseRepository<Campaign>, ICampaignRepository
 	{
 		return Table
 			.Include(c => c.DungeonMaster)
+			.Include(c => c.Characters)
 			.SingleOrDefaultAsync(c => c.Id == id);
 	}
 

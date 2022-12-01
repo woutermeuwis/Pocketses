@@ -7,6 +7,7 @@ import AppRouter from "./app-router";
 import {NavLink} from "react-router-dom"
 import {useModal} from "../contexts/modal-provider";
 import ReactModal from "react-modal";
+import {ToastContainer} from "react-toastify";
 
 const Application = () => {
 
@@ -181,6 +182,12 @@ const Application = () => {
             <AppRouter/>
 
             <Modal/>
+
+            <ToastContainer position={"top-center"}
+                            autoClose={5000}
+                            closeOnClick
+                            draggable
+                            theme={"colored"}/>
 
         </div>
     )

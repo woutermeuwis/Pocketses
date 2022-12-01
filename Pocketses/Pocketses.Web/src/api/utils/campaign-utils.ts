@@ -16,6 +16,13 @@ const getCampaignsConfig = (query?: string): QueryConfig => {
     });
 }
 
+const getCampaignConfig = (id: string): QueryConfig => {
+    const {http} = useAuth();
+    return ({
+        queryKey: [apiRoutes.campaigns, id],
+        queryFn: () => http.get(`${apiRoutes.campaigns}/${id ?? ''}`).then(res => res.data)
+    });
+}
 
 const createCampaignConfig = (): MutationConfig<{ name: string }> => {
     const {http} = useAuth();
@@ -50,10 +57,27 @@ const updateCampaignConfig = (): MutationConfig<Campaign> => {
     };
 }
 
+const joinCampaignConfig = (): MutationConfig<{ id: string }> => {
+    const {http} = useAuth();
+    const queryClient = useQueryClient();
+
+    return ({
+        mutationFn: ({id}) => http.post(`${apiRoutes.campaigns}/${id ?? ''}/join`, {characterName: 'example'}).then(res => res.data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [apiRoutes.campaigns]})
+        }
+    })
+}
+
 
 function useGetCampaigns(query?: string) {
     const result = useQuery(getCampaignsConfig(query));
     return {...result, campaigns: (result.data ?? []) as Campaign[]};
+}
+
+function useGetCampaignDetail(id: string) {
+    const result = useQuery(getCampaignConfig(id));
+    return {...result, campaign: result.data as Campaign};
 }
 
 function useCreateCampaign() {
@@ -70,4 +94,9 @@ function useUpdateCampaign() {
     return {...result, campaign: result.data};
 }
 
-export {useGetCampaigns, useCreateCampaign, useDeleteCampaign, useUpdateCampaign}
+function useJoinCampaign() {
+    const result = useMutation(joinCampaignConfig());
+    return {...result, campaign: result.data};
+}
+
+export {useGetCampaigns, useGetCampaignDetail, useCreateCampaign, useDeleteCampaign, useUpdateCampaign, useJoinCampaign}

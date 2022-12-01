@@ -1,18 +1,19 @@
-import { Routes, Route, Navigate } from "react-router-dom"
+import {Routes, Route, Navigate} from "react-router-dom"
 import Campaigns from "../../Pages/campaigns/campaigns";
-import CreateCampaign from "../../Pages/campaigns/create-campaign";
 import Characters from "../../Pages/main/characters";
 import Dashboard from "../../Pages/main/dashboard";
+import JoinCampaign from "../../Pages/campaigns/join-campaign";
 
 function AppRouter() {
     return (
         <Routes>
-            <Route path="campaigns" element={<Campaigns />} />
-            <Route path="create-campaign" element={<CreateCampaign />} />
-            <Route path="characters" element={<Characters />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="*" element={<Navigate to="/dashboard" />} />
+            <Route path={"campaigns"} element={<Campaigns/>}/>
+            <Route path={"campaigns/:campaignId/join"} element={<JoinCampaign/>}/>
+            <Route path="characters" element={<Characters/>}/>
+            <Route path="dashboard" element={<Dashboard/>}/>
+            <Route path="*" element={<Navigate to="/dashboard"/>}/>
         </Routes>
     );
 }
+
 export default AppRouter;

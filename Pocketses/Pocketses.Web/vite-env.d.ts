@@ -1,7 +1,7 @@
 import {ReactNode} from "react";
 import {MutationFunction, QueryFunction, QueryKey} from "@tanstack/react-query";
 
-type OnlyChildrenProps = {children: ReactNode}
+type OnlyChildrenProps = { children: ReactNode }
 
 type QueryConfig = {
     queryKey: QueryKey,
@@ -10,7 +10,7 @@ type QueryConfig = {
 }
 
 type MutationConfig<T> = {
-    mutationFn: MutationFunction<{},T>,
-    onSuccess: ()=>void
+    mutationFn: MutationFunction<{}, T>,
+    onSuccess: () => void
     config?: {}
 }

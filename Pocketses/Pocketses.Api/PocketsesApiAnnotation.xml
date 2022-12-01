@@ -25,17 +25,17 @@
             Campaigns
             </summary>
         </member>
-        <member name="M:Pocketses.Api.Controllers.CampaignsController.#ctor(Microsoft.Extensions.Logging.ILogger{Pocketses.Api.Controllers.CampaignsController},Pocketses.Core.AppServices.Interfaces.ICampaignAppService,AutoMapper.IMapper,Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.#ctor(Microsoft.Extensions.Logging.ILogger{Pocketses.Api.Controllers.CampaignsController},Pocketses.Core.AppServices.Interfaces.ICampaignAppService,AutoMapper.IMapper,Microsoft.AspNetCore.Http.IHttpContextAccessor,Pocketses.Core.AppServices.Interfaces.ICharacterAppService)">
             <inheritdoc/>
         </member>
-        <member name="M:Pocketses.Api.Controllers.CampaignsController.GetCampaigns(System.String)">
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.GetCampaignsAsync(System.String)">
             <summary>
             Get all Campaigns
             </summary>
             <param name="filter">Campaign name search query</param>
             <response code="200">Returns the list of Campaigns</response>
         </member>
-        <member name="M:Pocketses.Api.Controllers.CampaignsController.GetCampaign(System.Guid)">
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.GetCampaignAsync(System.Guid)">
             <summary>
             Get Campaign details by Id
             </summary>
@@ -43,7 +43,7 @@
             <response code="200">Returns the requested Campaign</response>
             <response code="404">The requested campaign could not be found</response>
         </member>
-        <member name="M:Pocketses.Api.Controllers.CampaignsController.Create(Pocketses.Core.Dto.Campaign.Request.CreateCampaignDto)">
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.CreateAsync(Pocketses.Core.Dto.Campaign.Request.CreateCampaignDto)">
             <summary>
             Create a new Campaign
             </summary>
@@ -51,14 +51,14 @@
             <response code="201">Returns the created campaign</response>
             <response code="400">The dto was invalid</response>
         </member>
-        <member name="M:Pocketses.Api.Controllers.CampaignsController.Delete(System.Guid)">
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.DeleteAsync(System.Guid)">
             <summary>
             Delete a Campaign
             </summary>
             <param name="id">The Id of the Campaign to be deleted</param>
             <response code="200">The campaign was successfully deleted</response>	
         </member>
-        <member name="M:Pocketses.Api.Controllers.CampaignsController.Update(System.Guid,Pocketses.Core.Dto.Campaign.Request.UpdateCampaignDto)">
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.UpdateAsync(System.Guid,Pocketses.Core.Dto.Campaign.Request.UpdateCampaignDto)">
             <summary>
             Update a given Campaign
             </summary>
@@ -67,6 +67,16 @@
             <response code="200">Returns the updated Campaign.</response>
             <response code="404">The given Campaign was not found.</response>
             <response code="400">The given Campaign state did not match the requested resource.</response>
+        </member>
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.JoinAsync(System.Guid,Pocketses.Core.Dto.Campaign.Request.JoinCampaignDto)">
+            <summary>
+            Join a given Campaign
+            </summary>
+            <param name="id">The id of the campaign to join</param>
+            <param name="joinDto">Details of the character to join with</param>
+            <response code="200">Returns the campaign the user joined</response>
+            <response code="404">The Campaign was not found</response>
+            <response code="400">The request body was not valid</response>
         </member>
         <member name="T:ProgramExtensions">
             <summary>

@@ -9,9 +9,12 @@ import {
     useGetCampaigns,
     useUpdateCampaign
 } from "../../api/utils/campaign-utils";
-import {TrashIcon, PlusCircleIcon, PencilIcon} from '@heroicons/react/24/outline'
+import {TrashIcon, PlusCircleIcon, PencilIcon, UserPlusIcon} from '@heroicons/react/24/outline'
 import LoadingSpinner from "../../components/infrastructure/loading-spinner";
 import UpdateCampaignForm from "../../components/forms/update-campaign-form";
+import {toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Campaigns = () => {
     const {showModal, closeModal} = useModal();
@@ -40,9 +43,15 @@ const Campaigns = () => {
         createCampaign({name});
     }
 
-    const onUpdate = (campaign: Campaign) =>{
+    const onUpdate = (campaign: Campaign) => {
         closeModal();
         updateCampaign(campaign);
+    }
+
+    const copyInviteLink = async ({id}: { id: string }) => {
+        const link = window.location.origin + "/campaigns/"+id+"/join";
+        await navigator.clipboard.writeText(link);
+        toast.info("Invite link copied!");
     }
 
     return (
@@ -59,6 +68,7 @@ const Campaigns = () => {
                     </button>
                 </div>
             </PageHeader>
+
             {isError &&
                 (<ul className={"mx-auto max-w-4xl"}>
                     {combineErrors().map(e => (
@@ -72,7 +82,6 @@ const Campaigns = () => {
                 </ul>)
             }
 
-            (
             <div className={"bg-slate-50 rounded-xl mx-auto my-4 w-fit "}>
                 <div className={"shadow-sm pt-8 flex justify-center"}>
                     <table className={"table-auto text-sm border-collapse"}>
@@ -101,14 +110,25 @@ const Campaigns = () => {
                                 <td className={"border-b border-slate-100 p-4 pl-8"}>
                                     <div>
                                         <button className={"bg-red-400 hover:bg-red-600 p-2 m-2 rounded-md text-white"}
+                                                title={"Delete"}
                                                 onClick={() => deleteCampaign({id: c.id})}>
                                             <TrashIcon className={"block h-6 w-6"}/>
                                         </button>
-                                        <button className={"bg-blue-400 hover:bg-blue-600 p-2 m-2 rounded-md text-white"}
-                                                onClick={() => showModal(<UpdateCampaignForm submit={onUpdate} current={c}/>)}>
+
+                                        <button
+                                            className={"bg-blue-400 hover:bg-blue-600 p-2 m-2 rounded-md text-white"}
+                                            title={"Edit"}
+                                            onClick={() => showModal(<UpdateCampaignForm submit={onUpdate}
+                                                                                         current={c}/>)}>
                                             <PencilIcon className={"block h-6 w-6"}/>
                                         </button>
 
+                                        <button
+                                            className={"bg-blue-400 hover:bg-blue-600 p-2 m-2 rounded-md text-white"}
+                                            title={"Invite"}
+                                            onClick={() => copyInviteLink({id: c.id})}>
+                                            <UserPlusIcon className={"block h-6 w-6"}/>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -117,7 +137,7 @@ const Campaigns = () => {
                     </table>
                 </div>
             </div>
-            )
+
 
             {isLoading && <LoadingSpinner/>}
         </>

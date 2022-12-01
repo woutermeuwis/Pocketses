@@ -2,7 +2,8 @@
 
 namespace Pocketses.Core.Models;
 
-public class Character :  AuditedEntity
+public class Character : AuditedEntity
 {
-    public string Name { get; set; }
+	public string UserId { get; set; }
+	public string Name { get; set; }
 }
