@@ -10,9 +10,11 @@ public class Campaign : AuditedEntity
 	public User DungeonMaster { get; set; }
 
 	public virtual ICollection<Character> Characters { get; set; }
+	public virtual ICollection<User> Players { get; set; }
 
 	public Campaign()
 	{
 		Characters = new List<Character>();
+		Players = new List<User>();
 	}
 }

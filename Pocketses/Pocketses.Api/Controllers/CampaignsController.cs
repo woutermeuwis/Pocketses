@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Pocketses.Core.AppServices.Interfaces;
 using Pocketses.Core.Dto.Campaign.Request;
 using Pocketses.Core.Dto.Campaign.Response;
-using Pocketses.Core.Extensions;
 using Pocketses.Core.Models;
 
 namespace Pocketses.Api.Controllers;
@@ -15,22 +14,16 @@ namespace Pocketses.Api.Controllers;
 [ApiController]
 [Authorize]
 [Route("[controller]")]
-public class CampaignsController : ControllerBase
+public class CampaignsController : BaseController
 {
-	private readonly ILogger<CampaignsController> _logger;
-	private readonly IHttpContextAccessor _httpContextAccessor;
 	private readonly ICampaignAppService _campaignAppService;
-	private readonly ICharacterAppService _characterAppService;
 	private readonly IMapper _mapper;
 
 	/// <inheritdoc/>
-	public CampaignsController(ILogger<CampaignsController> logger, ICampaignAppService campaignAppService, IMapper mapper, IHttpContextAccessor httpContextAccessor, ICharacterAppService characterAppService)
+	public CampaignsController(IHttpContextAccessor http, IMapper mapper, ICampaignAppService campaignAppService) : base(http)
 	{
-		_logger = logger;
 		_campaignAppService = campaignAppService;
 		_mapper = mapper;
-		_httpContextAccessor = httpContextAccessor;
-		_characterAppService = characterAppService;
 	}
 
 	/// <summary>
@@ -73,7 +66,7 @@ public class CampaignsController : ControllerBase
 	[HttpPost]
 	public async Task<ActionResult<CampaignDetailDto>> CreateAsync(CreateCampaignDto createDto)
 	{
-		var userId = _httpContextAccessor.GetUserId();
+		var userId = GetUserId();
 
 		if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(createDto?.Name))
 			return BadRequest();
@@ -94,6 +87,12 @@ public class CampaignsController : ControllerBase
 	[HttpDelete("{id}")]
 	public async Task<ActionResult> DeleteAsync(Guid id)
 	{
+		var userId = GetUserId();
+		var campaign = await _campaignAppService.GetCampaignAsync(id);
+
+		if (userId != campaign.DungeonMasterId)
+			return BadRequest("You are not the DM for this campaign");
+
 		await _campaignAppService.DeleteAsync(id);
 		return Ok();
 	}
@@ -116,6 +115,10 @@ public class CampaignsController : ControllerBase
 		if (campaign is null)
 			return NotFound();
 
+		var userId = GetUserId();
+		if (campaign.DungeonMasterId != userId)
+			return BadRequest("You are not the DM for this campaign");
+
 		campaign.Name = updateDto.Name;
 
 		campaign = await _campaignAppService.UpdateAsync(campaign);
@@ -133,28 +136,26 @@ public class CampaignsController : ControllerBase
 	/// <response code="404">The Campaign was not found</response>
 	/// <response code="400">The request body was not valid</response>
 	[HttpPost("{id}/join")]
-	public async Task<ActionResult<CampaignDetailDto>> JoinAsync(Guid id, JoinCampaignDto joinDto)
+	public async Task<ActionResult<CampaignDetailDto>> JoinAsync(Guid id)
 	{
-		var userId = _httpContextAccessor.GetUserId();
-
-		if (string.IsNullOrWhiteSpace(joinDto?.CharacterName))
-			return BadRequest();
+		var userId = GetUserId();
 
 		var campaign = await _campaignAppService.GetCampaignAsync(id);
 		if (campaign is null)
 			return NotFound();
 
-		var character = new Character
-		{
-			UserId = userId,
-			Name = joinDto.CharacterName
-		};
-		character = await _characterAppService.CreateAsync(character);
+		// if DM show error
+		if (campaign.DungeonMasterId == userId)
+			return Conflict("You can not join this campaign since you are the DM!");
 
-		campaign.Characters.Add(character);
-		campaign = await _campaignAppService.UpdateAsync(campaign);
+		// if already joined, show error
+		if (campaign.Players.Select(p => p.Id).Contains(userId))
+			return Conflict("You already joined this campaign!");
 
-		var updatedDto = _mapper.Map<CampaignDetailDto>(campaign);
+		// join campaign
+		var updated = await _campaignAppService.JoinCurrentUser(id);
+
+		var updatedDto = _mapper.Map<CampaignDetailDto>(updated);
 		return Ok(updatedDto);
 	}
 }

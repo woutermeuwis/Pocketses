@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Mvc;
 using Pocketses.Core.AppServices.Interfaces;
 
 namespace Pocketses.Api.Controllers;
@@ -10,15 +8,13 @@ namespace Pocketses.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("authenticate")]
-public class AuthController : ControllerBase
+public class AuthController : BaseController
 {
 	private readonly IUserAppService _userAppService;
-	private readonly ILogger<AuthController> _logger;
 
 	/// <inheritdoc/>
-	public AuthController(ILogger<AuthController> logger, IUserAppService userAppService)
+	public AuthController(IHttpContextAccessor http, IUserAppService userAppService) : base(http)
 	{
-		_logger = logger;
 		_userAppService = userAppService;
 	}
 

@@ -9,4 +9,5 @@ public interface ICampaignAppService
     Task<Campaign> CreateAsync(Campaign campaign);
     Task<Campaign> UpdateAsync(Campaign toUpdate);
     Task DeleteAsync(Guid value);
+	Task<Campaign> JoinCurrentUser(Guid campaignId);
 }

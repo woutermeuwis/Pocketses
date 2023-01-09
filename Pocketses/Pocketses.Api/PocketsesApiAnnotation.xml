@@ -9,7 +9,7 @@
             Authorization
             </summary>
         </member>
-        <member name="M:Pocketses.Api.Controllers.AuthController.#ctor(Microsoft.Extensions.Logging.ILogger{Pocketses.Api.Controllers.AuthController},Pocketses.Core.AppServices.Interfaces.IUserAppService)">
+        <member name="M:Pocketses.Api.Controllers.AuthController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,Pocketses.Core.AppServices.Interfaces.IUserAppService)">
             <inheritdoc/>
         </member>
         <member name="M:Pocketses.Api.Controllers.AuthController.Post(System.String)">
@@ -25,7 +25,7 @@
             Campaigns
             </summary>
         </member>
-        <member name="M:Pocketses.Api.Controllers.CampaignsController.#ctor(Microsoft.Extensions.Logging.ILogger{Pocketses.Api.Controllers.CampaignsController},Pocketses.Core.AppServices.Interfaces.ICampaignAppService,AutoMapper.IMapper,Microsoft.AspNetCore.Http.IHttpContextAccessor,Pocketses.Core.AppServices.Interfaces.ICharacterAppService)">
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,AutoMapper.IMapper,Pocketses.Core.AppServices.Interfaces.ICampaignAppService)">
             <inheritdoc/>
         </member>
         <member name="M:Pocketses.Api.Controllers.CampaignsController.GetCampaignsAsync(System.String)">
@@ -68,7 +68,7 @@
             <response code="404">The given Campaign was not found.</response>
             <response code="400">The given Campaign state did not match the requested resource.</response>
         </member>
-        <member name="M:Pocketses.Api.Controllers.CampaignsController.JoinAsync(System.Guid,Pocketses.Core.Dto.Campaign.Request.JoinCampaignDto)">
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.JoinAsync(System.Guid)">
             <summary>
             Join a given Campaign
             </summary>

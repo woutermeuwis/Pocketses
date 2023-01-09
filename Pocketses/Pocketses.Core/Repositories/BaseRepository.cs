@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pocketses.Core.DataAccessLayer;
-using Pocketses.Core.Extensions;
-using Pocketses.Core.Models.Specifications;
 
 namespace Pocketses.Core.Repositories;
 
@@ -31,14 +29,6 @@ public class BaseRepository<T> where T : class
 	public virtual Task<List<T>> GetAllAsync()
 	{
 		return Table.ToListAsync();
-	}
-
-	public virtual Task<List<T>> GetAllAsync(ISpecification<T> specification)
-	{
-		return Table
-			.AsQueryable()
-			.EvaluateSpecification(specification)
-			.ToListAsync();
 	}
 
 	public async virtual Task<T> UpdateAsync(T entity)
