@@ -9,15 +9,17 @@ import {
     useGetCampaigns,
     useUpdateCampaign
 } from "../../api/utils/campaign-utils";
-import {TrashIcon, PlusCircleIcon, PencilIcon, UserPlusIcon} from '@heroicons/react/24/outline'
+import {TrashIcon, PlusCircleIcon, PencilIcon, UserPlusIcon, PaperAirplaneIcon} from '@heroicons/react/24/outline'
 import LoadingSpinner from "../../components/infrastructure/loading-spinner";
 import UpdateCampaignForm from "../../components/forms/update-campaign-form";
 import {toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import {useNavigate} from "react-router-dom";
 
 
 const Campaigns = () => {
     const {showModal, closeModal} = useModal();
+    const navigate = useNavigate();
 
     const {campaigns, error: getError, status: getStatus} = useGetCampaigns();
     const {mutate: deleteCampaign, status: deleteStatus, error: deleteError} = useDeleteCampaign();
@@ -109,10 +111,11 @@ const Campaigns = () => {
                                 </td>
                                 <td className={"border-b border-slate-100 p-4 pl-8"}>
                                     <div>
-                                        <button className={"bg-red-400 hover:bg-red-600 p-2 m-2 rounded-md text-white"}
-                                                title={"Delete"}
-                                                onClick={() => deleteCampaign({id: c.id})}>
-                                            <TrashIcon className={"block h-6 w-6"}/>
+
+                                        <button className={"bg-blue-400 hover:bg-blue-600 p-2 m-2 rounded-md text-white"}
+                                                title={"Details"}
+                                                onClick={() => navigate('/campaigns/'+c.id+'/detail')}>
+                                            <PaperAirplaneIcon className={"block h-6 w-6"}/>
                                         </button>
 
                                         <button
@@ -129,6 +132,13 @@ const Campaigns = () => {
                                             onClick={() => copyInviteLink({id: c.id})}>
                                             <UserPlusIcon className={"block h-6 w-6"}/>
                                         </button>
+
+                                        <button className={"bg-red-400 hover:bg-red-600 p-2 m-2 rounded-md text-white"}
+                                                title={"Delete"}
+                                                onClick={() => deleteCampaign({id: c.id})}>
+                                            <TrashIcon className={"block h-6 w-6"}/>
+                                        </button>
+
                                     </div>
                                 </td>
                             </tr>

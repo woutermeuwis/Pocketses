@@ -2,11 +2,7 @@ import {useAuth} from "../../components/contexts/auth-context";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {apiRoutes} from "../api-routes";
 import {MutationConfig, QueryConfig} from "../../../vite-env";
-
-export interface Campaign {
-    name: string,
-    id: string
-}
+import {Campaign, CampaignDetail} from "../models/campaign-model"
 
 const getCampaignsConfig = (query?: string): QueryConfig => {
     const {http} = useAuth();
@@ -77,7 +73,7 @@ function useGetCampaigns(query?: string) {
 
 function useGetCampaignDetail(id: string) {
     const result = useQuery(getCampaignConfig(id));
-    return {...result, campaign: result.data as Campaign};
+    return {...result, campaign: result.data as CampaignDetail};
 }
 
 function useCreateCampaign() {

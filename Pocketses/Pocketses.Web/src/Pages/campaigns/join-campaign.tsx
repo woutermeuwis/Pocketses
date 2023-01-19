@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import PageHeader from "../../components/layout/page-header";
 import PageTitle from "../../components/headings/page-title";
 import {useGetCampaignDetail, useJoinCampaign} from "../../api/utils/campaign-utils";
@@ -6,11 +6,16 @@ import LoadingSpinner from "../../components/infrastructure/loading-spinner";
 
 const JoinCampaign = () => {
     const {campaignId} = useParams();
+    const navigate = useNavigate();
+
     const {campaign, error: getError, status: getStatus} = useGetCampaignDetail(campaignId ?? '');
     const {mutate: joinCampaign, status: joinStatus, error: joinError} = useJoinCampaign();
 
     const isLoading = getStatus === 'loading' || joinStatus === 'loading';
     const isError = getStatus === 'error' || joinStatus === 'error';
+
+    if(joinStatus === 'error' || joinStatus === 'success')
+        navigate('/campaigns/'+ campaign.id + '/detail');
 
     function combineErrors() {
         if (!isError) return [];
