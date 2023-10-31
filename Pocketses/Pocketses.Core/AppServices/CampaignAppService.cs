@@ -19,7 +19,7 @@ public class CampaignAppService : BaseAppService, ICampaignAppService
 		_userRepository = userRepository;
 	}
 
-	public async Task<List<Campaign>> GetCampaignsAsync(string searchFilter)
+	public async Task<List<Campaign>> GetCampaignsAsync()
 	{
 		var user = await _userRepository.GetWithCampaignsAsync(GetUserId());
 		var campaignIds = user.DmCampaigns.Union(user.UserCampaigns).Select(c => c.Id).ToArray();

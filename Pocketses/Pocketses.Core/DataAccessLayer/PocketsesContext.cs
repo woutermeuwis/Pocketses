@@ -101,6 +101,15 @@ public class PocketsesContext : IdentityDbContext
 			.HasOne(c => c.Campaign)
 			.WithMany(c => c.Characters)
 			.HasForeignKey(c => c.CampaignId);
+
+		builder.Entity<Character>()
+			.Navigation(c => c.User)
+			.AutoInclude();
+
+		builder.Entity<Character>()
+			.Navigation(c => c.Campaign)
+			.AutoInclude();
+
 	}
 
 }

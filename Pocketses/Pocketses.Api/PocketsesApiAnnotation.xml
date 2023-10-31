@@ -28,11 +28,10 @@
         <member name="M:Pocketses.Api.Controllers.CampaignsController.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,AutoMapper.IMapper,Pocketses.Core.AppServices.Interfaces.ICampaignAppService)">
             <inheritdoc/>
         </member>
-        <member name="M:Pocketses.Api.Controllers.CampaignsController.GetCampaignsAsync(System.String)">
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.GetCampaignsAsync">
             <summary>
             Get all Campaigns
             </summary>
-            <param name="filter">Campaign name search query</param>
             <response code="200">Returns the list of Campaigns</response>
         </member>
         <member name="M:Pocketses.Api.Controllers.CampaignsController.GetCampaignAsync(System.Guid)">
@@ -43,30 +42,31 @@
             <response code="200">Returns the requested Campaign</response>
             <response code="404">The requested campaign could not be found</response>
         </member>
-        <member name="M:Pocketses.Api.Controllers.CampaignsController.CreateAsync(Pocketses.Core.Dto.Campaign.Request.CreateCampaignDto)">
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.CreateAsync(Pocketses.Api.Dto.Campaign.Request.CreateCampaignDto)">
             <summary>
             Create a new Campaign
             </summary>
             <param name="createDto">The campaign to be created</param>
             <response code="201">Returns the created campaign</response>
-            <response code="400">The dto was invalid</response>
+            <response code="400">The payload could not be processed</response>
         </member>
         <member name="M:Pocketses.Api.Controllers.CampaignsController.DeleteAsync(System.Guid)">
             <summary>
             Delete a Campaign
             </summary>
             <param name="id">The Id of the Campaign to be deleted</param>
-            <response code="200">The campaign was successfully deleted</response>	
+            <response code="200">The campaign was successfully deleted</response>
+            <response code="400">This is not your campaign</response>
         </member>
-        <member name="M:Pocketses.Api.Controllers.CampaignsController.UpdateAsync(System.Guid,Pocketses.Core.Dto.Campaign.Request.UpdateCampaignDto)">
+        <member name="M:Pocketses.Api.Controllers.CampaignsController.UpdateAsync(System.Guid,Pocketses.Api.Dto.Campaign.Request.UpdateCampaignDto)">
             <summary>
             Update a given Campaign
             </summary>
             <param name="id">The Id of the Campaign to update</param>
             <param name="updateDto">The updated state of the Campaign</param>
-            <response code="200">Returns the updated Campaign.</response>
-            <response code="404">The given Campaign was not found.</response>
-            <response code="400">The given Campaign state did not match the requested resource.</response>
+            <response code="200">Returns the updated Campaign</response>
+            <response code="404">The given Campaign was not found</response>
+            <response code="400">The given Campaign state did not match the requested resourcev</response>
         </member>
         <member name="M:Pocketses.Api.Controllers.CampaignsController.JoinAsync(System.Guid)">
             <summary>
@@ -77,6 +77,51 @@
             <response code="200">Returns the campaign the user joined</response>
             <response code="404">The Campaign was not found</response>
             <response code="400">The request body was not valid</response>
+        </member>
+        <member name="M:Pocketses.Api.Controllers.CharactersController.GetCharactersAsync">
+            <summary>
+            Get all Characters
+            </summary>
+            <returns code="200">Returns the list of Characters</returns>
+        </member>
+        <member name="M:Pocketses.Api.Controllers.CharactersController.GetCharacterAsync(System.Guid)">
+            <summary>
+            Get Character details by id
+            </summary>
+            <param name="id">The Id of the Character to get</param>
+            <returns code="200">Returns the requested character</returns>
+            <returns code="404">The requested Character could not be found</returns>
+        </member>
+        <member name="M:Pocketses.Api.Controllers.CharactersController.CreateAsync(Pocketses.Api.Dto.Characters.Requests.CreateCharacterDto)">
+            <summary>
+            Create a new Character
+            </summary>
+            <param name="createDto">The Character to be created</param>
+            <returns code="201">Returns the created Character</returns>
+            <returns code="400">The payload could not be processed</returns>
+        </member>
+        <member name="M:Pocketses.Api.Controllers.CharactersController.DeleteAsync(System.Guid)">
+            <summary>
+            Delete a Character
+            </summary>
+            <param name="id">The id of the Character to be deleted</param>
+            <returns code="200">The Character was successfully deleted</returns>
+            <returns code="400">This is not your character</returns>
+        </member>
+        <member name="M:Pocketses.Api.Controllers.CharactersController.UpdateAsync(System.Guid,Pocketses.Api.Dto.Characters.Requests.UpdateCharacterDto)">
+            <summary>
+            Update a given Character
+            </summary>
+            <param name="id">The id of the Character to be updated</param>
+            <param name="updateDto">The updated state of the Character</param>
+            <response code="200">Returns the updated Character</response>
+            <response code="404">The given Character was not found</response>
+            <response code="400">The given Character state did not match the given Id, or you do not own this Character</response>	
+        </member>
+        <member name="P:Pocketses.Api.Dto.Campaign.Response.CampaignDetailDto.Characters">
+            <summary>
+            Character property information
+            </summary>
         </member>
         <member name="T:ProgramExtensions">
             <summary>

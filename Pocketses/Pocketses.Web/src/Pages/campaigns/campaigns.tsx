@@ -2,59 +2,76 @@ import PageTitle from "../../components/headings/page-title";
 import PageHeader from "../../components/layout/page-header";
 import {useModal} from "../../components/contexts/modal-provider";
 import NewCampaignForm from "../../components/forms/new-campaign-form";
-import {
-    Campaign,
-    useCreateCampaign,
-    useDeleteCampaign,
-    useGetCampaigns,
-    useUpdateCampaign
-} from "../../api/utils/campaign-utils";
 import {TrashIcon, PlusCircleIcon, PencilIcon, UserPlusIcon, PaperAirplaneIcon} from '@heroicons/react/24/outline'
 import LoadingSpinner from "../../components/infrastructure/loading-spinner";
 import UpdateCampaignForm from "../../components/forms/update-campaign-form";
 import {toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {useNavigate} from "react-router-dom";
+import {Campaign} from "../../api/models/campaign-model";
+import {useEffect, useState} from "react";
+import {useAuth} from "../../components/contexts/auth-context";
+import {apiRoutes} from "../../api/api-routes";
 
 
 const Campaigns = () => {
     const {showModal, closeModal} = useModal();
     const navigate = useNavigate();
+    const {http} = useAuth();
+    const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const {campaigns, error: getError, status: getStatus} = useGetCampaigns();
-    const {mutate: deleteCampaign, status: deleteStatus, error: deleteError} = useDeleteCampaign();
-    const {mutate: createCampaign, status: creationStatus, error: creationError} = useCreateCampaign();
-    const {mutate: updateCampaign, status: updateStatus, error: updateError} = useUpdateCampaign();
+    const logError = (err: any) => {
+        console.log(err);
+        setIsLoading(false);
+    }
 
-    const statusList = [getStatus, deleteStatus, creationStatus, updateStatus];
-    const isLoading = statusList.includes('loading');
-    const isError = statusList.includes('error');
-
-    function combineErrors() {
-        if (!isError) return [];
-        const errors: Error[] = [];
-        if (getError) errors.push(getError as Error);
-        if (deleteError) errors.push(deleteError as Error);
-        if (creationError) errors.push(creationError as Error);
-        if (updateError) errors.push(updateError as Error);
-        return errors;
+    const fetchData = () => {
+        setIsLoading(true);
+        http.get(apiRoutes.campaigns)
+            .then((res) => {
+                setCampaigns(res.data);
+                setIsLoading(false);
+            })
+            .catch(logError);
     }
 
     const onCreateNew = (name: string) => {
         closeModal();
-        createCampaign({name});
+        setIsLoading(true);
+        http.post(apiRoutes.campaigns, {name})
+            .then(fetchData)
+            .catch(logError);
     }
 
     const onUpdate = (campaign: Campaign) => {
         closeModal();
-        updateCampaign(campaign);
+
+        const dto = {
+            id: campaign.id,
+            name: campaign.name
+        };
+
+        setIsLoading(true);
+        http.patch(apiRoutes.campaign(campaign.id), dto)
+            .then(fetchData)
+            .catch(logError);
     }
 
-    const copyInviteLink = async ({id}: { id: string }) => {
-        const link = window.location.origin + "/campaigns/"+id+"/join";
+    const onDelete = (campaign: Campaign) => {
+        setIsLoading(true);
+        http.delete(apiRoutes.campaign(campaign.id))
+            .then(fetchData)
+            .catch(logError);
+    }
+
+    const copyInviteLink = async (id: string) => {
+        const link = window.location.origin + "/campaigns/" + id + "/join";
         await navigator.clipboard.writeText(link);
         toast.info("Invite link copied!");
     }
+
+    useEffect(fetchData, []);
 
     return (
         <>
@@ -70,19 +87,6 @@ const Campaigns = () => {
                     </button>
                 </div>
             </PageHeader>
-
-            {isError &&
-                (<ul className={"mx-auto max-w-4xl"}>
-                    {combineErrors().map(e => (
-                        <li key={e.message}>
-                            <div className={"bg-red-200 border rounded-md p-4"}>
-                                <p className={"text-lg font-bold text-red-800 text-center"}>
-                                    {e.message}
-                                </p>
-                            </div>
-                        </li>))}
-                </ul>)
-            }
 
             <div className={"bg-slate-50 rounded-xl mx-auto my-4 w-fit "}>
                 <div className={"shadow-sm pt-8 flex justify-center"}>
@@ -112,9 +116,10 @@ const Campaigns = () => {
                                 <td className={"border-b border-slate-100 p-4 pl-8"}>
                                     <div>
 
-                                        <button className={"bg-blue-400 hover:bg-blue-600 p-2 m-2 rounded-md text-white"}
-                                                title={"Details"}
-                                                onClick={() => navigate('/campaigns/'+c.id+'/detail')}>
+                                        <button
+                                            className={"bg-blue-400 hover:bg-blue-600 p-2 m-2 rounded-md text-white"}
+                                            title={"Details"}
+                                            onClick={() => navigate('/campaigns/' + c.id + '/detail')}>
                                             <PaperAirplaneIcon className={"block h-6 w-6"}/>
                                         </button>
 
@@ -129,13 +134,13 @@ const Campaigns = () => {
                                         <button
                                             className={"bg-blue-400 hover:bg-blue-600 p-2 m-2 rounded-md text-white"}
                                             title={"Invite"}
-                                            onClick={() => copyInviteLink({id: c.id})}>
+                                            onClick={() => copyInviteLink(c.id)}>
                                             <UserPlusIcon className={"block h-6 w-6"}/>
                                         </button>
 
                                         <button className={"bg-red-400 hover:bg-red-600 p-2 m-2 rounded-md text-white"}
                                                 title={"Delete"}
-                                                onClick={() => deleteCampaign({id: c.id})}>
+                                                onClick={() => onDelete(c)}>
                                             <TrashIcon className={"block h-6 w-6"}/>
                                         </button>
 
@@ -147,7 +152,6 @@ const Campaigns = () => {
                     </table>
                 </div>
             </div>
-
 
             {isLoading && <LoadingSpinner/>}
         </>

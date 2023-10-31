@@ -5,6 +5,6 @@ export interface Campaign {
     id: string
 }
 
-export interface CampaignDetail extends Campaign {
+export interface CampaignInfo extends Campaign {
     characters: Character[]
 }

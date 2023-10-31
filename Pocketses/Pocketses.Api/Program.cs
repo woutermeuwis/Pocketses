@@ -1,7 +1,6 @@
-using System;
-using System.IO;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,12 +9,8 @@ using Pocketses.Api;
 using Pocketses.Core;
 using Pocketses.Core.DataAccessLayer;
 using Pocketses.Core.Models;
+using System.Reflection;
 using System.Text;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 
 WebApplication.CreateBuilder(args)
@@ -132,4 +127,20 @@ public static class ProgramExtensions
 			builder.AllowAnyHeader();
 		});
 	}
+
+	private static void ConfigureAutoMapper(Assembly assembly, ContainerBuilder builder)
+	{
+		var profiles = assembly.DefinedTypes.Where(t => typeof(Profile).IsAssignableFrom(t)).Select(t => Activator.CreateInstance(t) as Profile).ToArray();
+		var configuration = new MapperConfiguration(cfg => cfg.AddProfiles(profiles));
+
+#if DEBUG
+		configuration.AssertConfigurationIsValid();
+#endif
+
+		builder
+			.RegisterInstance(configuration.CreateMapper())
+			.As<IMapper>()
+			.SingleInstance();
+	}
+
 }

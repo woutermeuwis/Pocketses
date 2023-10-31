@@ -1,10 +1,10 @@
 import {useState} from "react";
 
-interface NewCampaignProps {
+interface NewCharacterProps {
     submit: (name: string) => void
 }
 
-const NewCampaignForm = ({submit}: NewCampaignProps) => {
+const NewCharacterForm = ({submit}: NewCharacterProps) => {
     const [name, setName] = useState('');
 
     function submitForm(event: any) {
@@ -16,17 +16,17 @@ const NewCampaignForm = ({submit}: NewCampaignProps) => {
         <>
             <form onSubmit={submitForm}>
                 <div className={"shadow sm:overflow-hidden sm:rounded-md"}>
-                    <div className={"space-y-6  bg-white px-4 py-5 sm:p-6"}>
+                    <div className={"space-y-6 bg-white px-4 py-5 sm:p-6"}>
                         <div>
-                            <label htmlFor={"CampaignName"}
+                            <label htmlFor={"CharacterName"}
                                    className={"block text-sm font-medium text-gray-700"}>
-                                Campaign Name
+                                Character Name
                             </label>
 
-                            <div className="flex mt-1 rounded-md shadow-sm">
+                            <div className={"flex mt-1 rounded-md shadow-sm"}>
                                 <input type={"text"}
-                                       id={"CampaignName"}
-                                       placeholder={"Campaign"}
+                                       id={"CharacterName"}
+                                       placeholder={"Name"}
                                        value={name}
                                        onChange={e => setName(e.target.value)}
                                        className={"block w-full flex-1 rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"}/>
@@ -45,4 +45,4 @@ const NewCampaignForm = ({submit}: NewCampaignProps) => {
     );
 }
 
-export default NewCampaignForm
+export default NewCharacterForm;

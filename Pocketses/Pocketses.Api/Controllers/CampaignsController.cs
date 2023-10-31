@@ -1,9 +1,9 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Pocketses.Api.Dto.Campaign.Request;
+using Pocketses.Api.Dto.Campaign.Response;
 using Pocketses.Core.AppServices.Interfaces;
-using Pocketses.Core.Dto.Campaign.Request;
-using Pocketses.Core.Dto.Campaign.Response;
 using Pocketses.Core.Models;
 
 namespace Pocketses.Api.Controllers;
@@ -29,12 +29,11 @@ public class CampaignsController : BaseController
 	/// <summary>
 	/// Get all Campaigns
 	/// </summary>
-	/// <param name="filter">Campaign name search query</param>
 	/// <response code="200">Returns the list of Campaigns</response>
 	[HttpGet]
-	public async Task<ActionResult<IEnumerable<CampaignDto>>> GetCampaignsAsync(string? filter)
+	public async Task<ActionResult<IEnumerable<CampaignDto>>> GetCampaignsAsync()
 	{
-		var campaigns = await _campaignAppService.GetCampaignsAsync(filter);
+		var campaigns = await _campaignAppService.GetCampaignsAsync();
 		var dtos = campaigns.Select(_mapper.Map<CampaignDto>);
 
 		return Ok(dtos);
@@ -62,7 +61,7 @@ public class CampaignsController : BaseController
 	/// </summary>
 	/// <param name="createDto">The campaign to be created</param>
 	/// <response code="201">Returns the created campaign</response>
-	/// <response code="400">The dto was invalid</response>
+	/// <response code="400">The payload could not be processed</response>
 	[HttpPost]
 	public async Task<ActionResult<CampaignDetailDto>> CreateAsync(CreateCampaignDto createDto)
 	{
@@ -83,7 +82,8 @@ public class CampaignsController : BaseController
 	/// Delete a Campaign
 	/// </summary>
 	/// <param name="id">The Id of the Campaign to be deleted</param>
-	/// <response code="200">The campaign was successfully deleted</response>	
+	/// <response code="200">The campaign was successfully deleted</response>
+	/// <response code="400">This is not your campaign</response>
 	[HttpDelete("{id}")]
 	public async Task<ActionResult> DeleteAsync(Guid id)
 	{
@@ -102,9 +102,9 @@ public class CampaignsController : BaseController
 	/// </summary>
 	/// <param name="id">The Id of the Campaign to update</param>
 	/// <param name="updateDto">The updated state of the Campaign</param>
-	/// <response code="200">Returns the updated Campaign.</response>
-	/// <response code="404">The given Campaign was not found.</response>
-	/// <response code="400">The given Campaign state did not match the requested resource.</response>
+	/// <response code="200">Returns the updated Campaign</response>
+	/// <response code="404">The given Campaign was not found</response>
+	/// <response code="400">The given Campaign state did not match the requested resourcev</response>
 	[HttpPatch("{id}")]
 	public async Task<ActionResult<CampaignDetailDto>> UpdateAsync(Guid id, UpdateCampaignDto updateDto)
 	{

@@ -1,14 +1,17 @@
 import {useNavigate, useParams} from "react-router-dom";
 import PageHeader from "../../components/layout/page-header";
 import PageTitle from "../../components/headings/page-title";
-import {useGetCampaignDetail, useJoinCampaign} from "../../api/utils/campaign-utils";
+import { useJoinCampaign} from "../../api/utils/campaign-utils";
 import LoadingSpinner from "../../components/infrastructure/loading-spinner";
+import {Campaign} from "../../api/models/campaign-model";
 
 const JoinCampaign = () => {
     const {campaignId} = useParams();
     const navigate = useNavigate();
 
-    const {campaign, error: getError, status: getStatus} = useGetCampaignDetail(campaignId ?? '');
+    const campaign:Campaign = {id: '', name:''};
+    const getError = {};
+    const getStatus = {};
     const {mutate: joinCampaign, status: joinStatus, error: joinError} = useJoinCampaign();
 
     const isLoading = getStatus === 'loading' || joinStatus === 'loading';
